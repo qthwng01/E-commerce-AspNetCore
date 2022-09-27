@@ -497,7 +497,7 @@ namespace DA_TOTNGHIEP.Controllers
             //request params need to request to MoMo system
             string endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
             string partnerCode = "YOUR CODE";
-            string accessKey = "YOUR ACCESS KEY
+            string accessKey = "YOUR ACCESS KEY"
             string serectkey = "YOUR SERECT KEY";
             string orderInfo = "Giao dịch thanh toán MoMo C&T Shop";
             string returnUrl = "https://localhost:5001/Carts/ConfirmPaymentClient";
