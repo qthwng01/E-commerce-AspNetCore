@@ -1,4 +1,4 @@
-# Ecommerce-Shop App Asp Net Core
+# Ecommerce-Shop App
 Graduation Thesis
 
 TÊN ĐỀ TÀI: WEBSITE BÁN HÀNG VỚI ASP.NET CORE 
