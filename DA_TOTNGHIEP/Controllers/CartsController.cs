@@ -496,9 +496,9 @@ namespace DA_TOTNGHIEP.Controllers
             var getUser = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
             //request params need to request to MoMo system
             string endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
-            string partnerCode = "MOMO58L620220712";
-            string accessKey = "p1i4tWjtBB4NTLuu";
-            string serectkey = "ohZm4EfrKQnQCysfR3fyE1Mk3ipKBhzw";
+            string partnerCode = "YOUR CODE";
+            string accessKey = "YOUR ACCESS KEY
+            string serectkey = "YOUR SERECT KEY";
             string orderInfo = "Giao dịch thanh toán MoMo C&T Shop";
             string returnUrl = "https://localhost:5001/Carts/ConfirmPaymentClient";
             string notifyurl = "https://9322-116-102-185-51.ap.ngrok.io/Carts/OrderSuccess"; //lưu ý: notifyurl không được sử dụng localhost, có thể sử dụng ngrok để public localhost trong quá trình test
