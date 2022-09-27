@@ -1,0 +1,530 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Products>, IEnumerable<DA_TOTNGHIEP.Models.Comment>>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Apple Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+<style>
+    .product {
+    margin-top:160px;
+    }
+    .list-product {
+    position: relative
+    }
+
+    .list-product .swiper {
+    margin-top: 5px;
+    }
+
+    .list-product .swiper .swiper-wrapper .swiper-slide {
+    height: 440px;
+    }
+
+    .swiper-slide {
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    }
+
+    .swiper-slide .items-product .content-product {
+    line-height: 25px;
+    padding: 10px;
+    }
+
+    .swiper-slide .items-product .name-product {
+    text-align: left;
+    font-weight: bold;
+    color: #000;
+    font-weight: bold;
+    }
+
+    .swiper-slide .items-product .price-product {
+    display: flex;
+    }
+
+    .swiper-slide .items-product .price-product .special-price {
+    font-weight: bold;
+    font-size: 15px;
+    color: #d70018;
+    }
+
+    .swiper-slide .items-product .price-product .old-price {
+    padding-left: 15px;
+    font-size: 12px;
+    text-decoration: line-through;
+    }
+
+    .swiper-slide .items-product .evaluate {
+    /* margin-bottom: 20px; */
+    display: flex;
+    font-size: 13px;
+    }
+
+    .swiper-slide .items-product .evaluate .evaluate-star .fa-star.checked {
+    color: #F59E0B;
+    }
+    .swiper-slide .items-product .evaluate .evaluate-star .fa-star.unchecked {
+    color: #808080;
+    }
+    .swiper-slide .items-product .evaluate .evaluate-quantity {
+    padding-left: 10px;
+    }
+
+    .filter-produt-all .filter-product-title {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    @*Dropdown*@
+    .dropbtn {
+    background-color: #e5e5e5;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #000;
+    padding: 9px;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #d2d2d2;
+    }
+
+    .dropdown {
+    margin-right: 1rem;
+    position: relative;
+    display: inline-block;
+    }
+
+    .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 410px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    z-index: 1;
+    padding: 5px;
+    }
+
+    .dropdown-content button {
+        font-size: 15px;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+    .dropdown-content .dropdown-price {
+        float: left;
+        border: 1px solid #000;
+        border-radius: 1rem;
+        margin: 5px;
+    }
+    .dropdown button:hover {
+    background-color: #ddd;
+    }
+
+    .show {
+    display: block;
+    }
+    @*End-Dropdown*@
+    @*Dropdown-Brand*@
+    .dropbtnBrand {
+    background-color: #e5e5e5;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #000;
+    padding: 9px;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    .dropbtnBrand:hover, .dropbtnBrand:focus {
+    background-color: #d2d2d2;
+    }
+
+    .dropdownBrand {
+    position: relative;
+    display: inline-block;
+    }
+
+    .dropdown-content-Brand {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 380px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    z-index: 1;
+    padding: 5px;
+    }
+
+    .dropdown-content-Brand a {
+    font-size: 15px;
+    color: black;
+    padding: 11px 11px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    }
+    .dropdown-content-Brand a img {
+    width: 80px;
+    height: 17px;
+    display: flex;
+    }
+
+    .dropdown-content-Brand .dropdown-Brand {
+    background: #fff;
+    float: left;
+    border: 1px solid #e0e0e0;
+    border-radius: 1rem;
+    margin: 5px;
+    }
+    .dropdown-content-Brand .dropdown-Brand:hover {
+    border: 1px solid #0094ff;
+    }
+    .dropdownBrand .dropbtnBrand:hover {
+    background-color: #ddd;
+    }
+    .showBrand {
+    display: block;
+    }
+    @*End-Dropdown-Brand*@
+    @*Sort*@
+    .sort-product-all .sort-product-title {
+        font-weight: bold;
+        font-size: 16px;
+        margin: 10px 0px;
+    }
+    .sort-product-all .sort-product-content a {
+        color: #000;
+    }
+    .sort-product-all .sort-product-content .sort-product-ascending {
+        margin-right: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 7px;
+        background-color: #e5e5e5;
+        cursor: pointer;
+    }
+    .sort-product-all .sort-product-content .sort-product-descending {
+            margin-right: 5px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            padding: 7px;
+            background-color: #e5e5e5;
+            cursor: pointer;
+        }
+    .sort-product-all .sort-product-content .sort-product-trending {
+        margin-right: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 7px;
+        background-color: #e5e5e5;
+        cursor: pointer;
+    }
+    @*End-Sort*@
+</style>
+<div class="product">
+    <div class="title-product-search" style="text-align: center;">
+        <p class="main-title-search" style="font-size:18px;font-weight:600">
+            Sản phẩm của hãng <strong style="color: #d70018">Oppo</strong> (<span style="font-weight:700">@Model.Item1.Count()</span>)
+        </p>
+    </div>
+    <div class="product-outstanding">
+        <div class="filter-produt-all">
+            <div class="filter-product-title">Chọn theo tiêu chí</div>
+            <div class="filter-product-content">
+                <div class="dropdown">
+                    <button onclick="myFunctionDropdown()" class="dropbtn">Giá <i class="fas fa-caret-down"></i></button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <form asp-controller="Home" asp-action="Oppo" method="get">
+                            <button name="price" value="Dưới 5 triệu" class="dropdown-price">Dưới 5 triệu</button>
+                            <button name="price" value="5 - 10 triệu" class="dropdown-price">5 - 10 triệu</button>
+                            <button name="price" value="10 - 15 triệu" class="dropdown-price">10 - 15 triệu</button>
+                            <button name="price" value="15 - 20 triệu" class="dropdown-price">15 - 20 triệu</button>
+                            <button name="price" value="Trên 20 triệu" class="dropdown-price">Trên 20 triệu</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="dropdownBrand">
+                    <button onclick="myFunctionDropdownBrand()" class="dropbtnBrand">Hãng điện thoại <i class="fas fa-caret-down"></i></button>
+                    <div id="myDropdownBrand" class="dropdown-content-Brand">
+                            <a asp-controller="Home" asp-action="Apple" class="dropdown-Brand"><img src="https://cellphones.com.vn/media/icons/brands/brand-286.svg" alt="" /></a>
+                            <a asp-controller="Home" asp-action="SamSung" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png" alt="" /></a>
+                            <a asp-controller="Home" asp-action="Xiaomi" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png" alt="" /></a>
+                            <a asp-controller="Home" asp-action="Oppo" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg" alt=""></a>
+                            <a asp-controller="Home" asp-action="Nokia" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sort-product-all">
+            <div class="sort-product-title">Sắp xếp theo</div>
+            <div class="sort-product-content">
+                @*<button class="sort-product-trending">
+                    <a asp-controller="Home" asp-action="ProductTrending">Nổi bật <i class="fas fa-thumbs-up"></i></a>
+                </button>*@
+                @if (@ViewData["PriceAscending"] != "")
+                {
+                    <button class="sort-product-ascending">
+                        <a asp-controller="Home" asp-action="Oppo" asp-route-sortOrderAscending="@ViewData["PriceAscending"]">Giá tăng dần <i class="fas fa-sort-amount-up"></i></a>
+                    </button>
+                }
+                else if (@ViewData["PriceAscending"] == "")
+                {
+                    <button class="sort-product-ascending" style=" border: 1px solid #d70018; background: #FEF2F2">
+                        <a asp-controller="Home" asp-action="Oppo" asp-route-sortOrderAscending="@ViewData["PriceAscending"]" style="color: #d70018;">Giá tăng dần <i class="fas fa-sort-amount-up"></i></a>
+                    </button>
+                }
+                @if (@ViewData["PriceDescending"] != "")
+                {
+                    <button class="sort-product-descending">
+                        <a asp-controller="Home" asp-action="Oppo" asp-route-sortOrderDescending="@ViewData["PriceDescending"]">Giá giảm dần <i class="fas fa-sort-amount-down"></i></a>
+                    </button>
+                }
+                else if (@ViewData["PriceDescending"] == "")
+                {
+                    <button class="sort-product-descending" style=" border: 1px solid #d70018; background: #FEF2F2">
+                        <a asp-controller="Home" asp-action="Oppo" asp-route-sortOrderDescending="@ViewData["PriceDescending"]" style="color: #d70018;">Giá giảm dần <i class="fas fa-sort-amount-down"></i></a>
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="list-product">
+            <div class="row">
+                @foreach (var item in Model.Item1)
+                {
+                    int ratingCount = 0;
+                    int? ratingAverage = 0;
+                    int? ratingSum = 0;
+                    @if (item.Status == true)
+                    {
+                        <div class="col-md-3">
+                            <div class="items-product">
+                                @if (item.ImageProductId == null)
+                                {
+                                    <div class="image-product">
+                                        <a href="">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" alt="" />
+                                            <h3>No data</h3>
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="image-product">
+                                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                            <img src="~/assetsAdmin/imgProducts/@item.ImageProductss.ImageName" style="width: 220px; height: 220px " alt="">
+                                        </a>
+                                    </div>
+
+                                }
+                                <div class="content-product">
+                                    <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                        <div class="name-product" style="font-size: 16px">@item.Name</div>
+                                    </a>
+                                    <div class="price-product">
+                                        <p class="special-price">@item.Price.ToString("#,##0") ₫</p>
+                                        <p class="old-price">34.900.000 ₫</p>
+                                    </div>
+                                    @foreach (var item2 in Model.Item2)
+                                    {
+                                        @if (item.Id == item2.ProductId)
+                                        {<span style="display:none">@(ratingSum += item2.Rating)</span>
+                                            <span style="display:none">@((ratingCount += 1))</span>
+                                            <span style="display:none">@((ratingAverage = ratingSum / ratingCount))</span>
+                                        }
+                                    }
+                                    <div class="evaluate" style="font-size:13px">
+                                        <div class="evaluate-star">
+                                            @if (ratingAverage == 0)
+                                            {
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 1)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 2)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 3)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 4)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 5)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                            }
+                                        </div>
+                                        <div class="evaluate-quantity">
+                                            <span>@ratingCount đánh giá</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                    }
+                }
+            </div>
+            @if (Model.Item1.Count() > 4)
+            {
+                <a href="#" id="loadMore">Xem thêm sản phẩm <i class="fas fa-caret-down"></i></a>
+            }
+        </div>
+    </div>
+</div>
+<div class="brand-page">
+    <div class="title-brand-page">
+        <p class="main-title">CHUYÊN TRANG THƯƠNG HIỆU</p>
+    </div>
+    <div class="content-brand-page">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-apple-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-samsung-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-asus-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-xiaomi-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper', {
+        slidesPerView: 4,
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        direction: getDirection(),
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        on: {
+            resize: function () {
+                swiper.changeDirection(getDirection());
+            },
+        },
+    });
+
+    function getDirection() {
+        var windowWidth = window.innerWidth;
+        var direction = window.innerWidth <= 760 ? 'vertical' : 'horizontal';
+
+        return direction;
+    }
+@*Dropdown*@
+    function myFunctionDropdown() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+@*End-Dropdown*@
+@* Dropdown - Brand *@
+function myFunctionDropdownBrand() {
+    document.getElementById("myDropdownBrand").classList.toggle("showBrand");
+}
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtnBrand')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content-Brand");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('showBrand')) {
+                openDropdown.classList.remove('showBrand');
+            }
+        }
+    }
+}
+@* End - Dropdown - Brand *@
+</script>
+

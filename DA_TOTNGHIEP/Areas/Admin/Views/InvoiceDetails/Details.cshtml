@@ -1,0 +1,236 @@
+﻿@model DA_TOTNGHIEP.Models.InvoiceDetails
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = null;
+}
+<style>
+    body {
+        background-color: #F6F6F6;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+    }
+
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
+
+    .brand-section {
+        background-color: #D70018;
+        padding: 10px 40px;
+    }
+
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .text-white {
+        color: #fff;
+    }
+
+    .company-details {
+        float: right;
+        text-align: right;
+    }
+
+    .body-section {
+        padding: 16px;
+        border: 1px solid gray;
+    }
+
+    .heading {
+        font-size: 20px;
+        margin-bottom: 08px;
+    }
+
+    .sub-heading {
+        color: #262626;
+        margin-bottom: 05px;
+    }
+
+    table {
+        background-color: #fff;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        table td {
+            vertical-align: middle !important;
+            text-align: center;
+        }
+
+        table th, table td {
+            padding-top: 08px;
+            padding-bottom: 08px;
+        }
+
+    .table-bordered {
+        box-shadow: 0px 0px 5px 0.5px gray;
+    }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #dee2e6;
+        }
+
+    .text-right {
+        text-align: end;
+    }
+
+    .w-20 {
+        width: 20%;
+    }
+
+    .float-right {
+        float: right;
+    }
+</style>
+<style type="text/css">
+    @@media screen {
+        #printSection {
+            display: none;
+        }
+    }
+
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #printSection, #printSection * {
+            visibility: visible;
+        }
+
+        #printSection {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+</style>
+<h4>Chi tiết hoá đơn</h4>
+<div type="button" id="Print" style="float:right;margin-top: -2rem"><i class='fas fa-print'></i>In hoá đơn</div>
+<hr />
+<div class="container">
+    <div class="brand-section">
+        <div class="row">
+            <div class="col-6">
+                <h1 class="text-white">C&T Shop</h1>
+            </div>
+            <div class="col-6">
+                <div class="company-details">
+                    <p class="text-white">Chi tiết hoá đơn mua hàng</p>
+                    <p class="text-white">Hotline: +0912345678</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="row">
+
+            <div class="col-6">
+                <h2 class="heading">Invoice No: @Model.Invoice.Code</h2>
+                @*<p class="sub-heading">Tracking No. fabcart2025 </p>*@
+                <p class="sub-heading">Ngày tạo: @Model.Invoice.IssuedDate </p>
+                <p class="sub-heading">Email: @Model.Invoice.Email</p>
+            </div>
+            <div class="col-6">
+                <p class="sub-heading">Họ và tên: @Model.Invoice.Fullname </p>
+                <p class="sub-heading">Địa chỉ: @Model.Invoice.ShippingAddress </p>
+                <p class="sub-heading">SĐT: @Model.Invoice.ShippingPhone </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="body-section">
+        <h3 class="heading">Các sản phẩm đã đặt</h3>
+        <br>
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Sản phẩm</th>
+                    <th class="w-20" style="text-align:center;">Giá</th>
+                    <th class="w-20" style="text-align:center;">Số lượng</th>
+                    <th class="w-20" style="text-align:center;">Tạm tính</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Product.Name</td>
+                    <td>@Model.Product.Price.ToString("#,##VNĐ")</td>
+                    <td>@Model.Quantity</td>
+                    <td>@Model.UnitPrice.ToString("#,##VNĐ")</td>
+                </tr>
+                @*<tr>
+                        <td colspan="3" class="text-right">Sub Total</td>
+                        <td> 10.XX</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right">Tax Total %1X</td>
+                        <td> 2</td>
+                    </tr>*@
+                <tr>
+                    <td colspan="3" class="text-right">Tổng tiền</td>
+                    <td>@Model.UnitPrice.ToString("#,##VNĐ")</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h3 class="heading" style="display:inline">-Thanh toán bằng: @Model.Payment</h3><br />
+        @if (Model.MomoConfirm != null)
+        {
+            <h3 class="heading" style="display:block">-Thông báo: @Model.MomoConfirm</h3>
+        }
+        else
+        {
+            <h3 class="heading" style="display:none"></h3>
+        }
+
+        @if (Model.Invoice.StatusId == 0)
+        {
+            <h3 class="heading" style="display:contents">-Trạng thái đơn hàng:</h3><span class="badge bg-info text-white"> Chờ duyệt</span>}
+        @if (Model.Invoice.StatusId == 1)
+        {
+            <h3 class="heading" style="display:contents">-Trạng thái đơn hàng:</h3><span class="badge bg-primary text-white"> Đang giao hàng</span>}
+        @if (Model.Invoice.StatusId == 2)
+        {
+            <h3 class="heading" style="display:contents">-Trạng thái đơn hàng:</h3><span class="badge bg-danger text-white"> Hủy đơn</span>}
+        @if (Model.Invoice.StatusId == 3)
+        {
+            <h3 class="heading" style="display:contents">-Trạng thái đơn hàng:</h3><span class="badge bg-danger text-white"> Giao dịch không hoàn thành</span>}
+        @if (Model.Invoice.StatusId == 4)
+        {
+            <h3 class="heading" style="display:contents">-Trạng thái đơn hàng:</h3><span class="badge bg-success text-white"> Đã giao</span>}
+    </div>
+
+</div>
+<script>
+    document.getElementById("Print").onclick = function () {
+        printElement(document.getElementById("printThis"));
+    };
+
+    function printElement(elem) {
+        var domClone = elem.cloneNode(true);
+
+        var $printSection = document.getElementById("printSection");
+
+        if (!$printSection) {
+            var $printSection = document.createElement("div");
+            $printSection.id = "printSection";
+            document.body.appendChild($printSection);
+        }
+
+        $printSection.innerHTML = "";
+        $printSection.appendChild(domClone);
+        window.print();
+    }
+</script>

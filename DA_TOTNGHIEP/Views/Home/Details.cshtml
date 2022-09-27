@@ -1,0 +1,524 @@
+﻿@model DA_TOTNGHIEP.Models.Products
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@{
+    ViewBag.Title = Model.Name;
+    var comments = (IEnumerable<DA_TOTNGHIEP.Models.Comment>)ViewBag.Comments;
+    var ratingSum = ViewBag.RatingSum;
+    var ratingCount = ViewBag.RatingCount;
+
+    decimal rating = 0;
+    if (ratingCount > 0)
+    {
+        rating = (ratingSum / ratingCount);
+    }
+    var totalRating = decimal.Parse(rating.ToString());
+}
+<style>
+    .rating-count {
+        padding: 10px 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .rating-count-details-content {
+        font-size: 20px;
+    }
+
+    .rating-count .rating-count-details-content .fa-star.checked {
+        color: #F59E0B;
+    }
+
+    .rating-count .rating-count-details-content .fa-star.unchecked {
+        color: #808080;
+    }
+
+    .comment-rating .fa-star.checked {
+        color: #F59E0B;
+    }
+
+    .comment-rating .fa-star.unchecked {
+        color: #808080;
+    }
+
+    .collapsible {
+        background-color: #D70018;
+        color: white;
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 3px;
+        text-align: center;
+        outline: none;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+        .active, .collapsible:hover {
+            background-color: #e30d25;
+        }
+
+        .collapsible:after {
+            content: '\002B';
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+    .active:after {
+        content: "\2212";
+    }
+
+    .content {
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        background-color: #f1f1f1;
+    }
+
+
+    @*Action Comment*@
+    .dropbtn-action {
+        background-color: #cacaca;
+        color: #000;
+        padding: 0px 4px;
+        font-size: 15px;
+        border: none;
+        border-radius: 2rem;
+        cursor: pointer;
+    }
+
+    .dropdown-action {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content-action {
+        display: none;
+        border-radius: 5px;
+        position: absolute;
+        right: 0;
+        background-color: #f9f9f9;
+        min-width: 78px;
+        box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+        z-index: 1;
+    }
+
+        .dropdown-content-action button {
+            color: black;
+            padding: 10px 6px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content-action button:hover {
+                font-weight: bold;
+                background-color: #f1f1f1;
+            }
+
+    .dropdown-action:hover .dropdown-content-action {
+        display: block;
+    }
+
+    .dropdown-action:hover .dropbtn-action {
+        background-color: #8b8b8b
+    }
+    .dropdown-action:hover i {
+        color: #000;
+    }
+    .dropbtn-action i {
+        color: #707070
+    }
+    @*End Action Comment*@
+
+</style>
+<div class="container section-detail">
+    <ul class="breadcumb">
+        <li>
+            <a asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+            <meta property="position" content="1">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-controller="Home" asp-action="AllProduct">Điện thoại</a>
+            <meta property="position" content="2">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-controller="Home" asp-action="@Model.ProductType.Name">@Model.ProductType.Name</a>
+            <meta property="position" content="3">
+        </li>
+    </ul>
+
+    <h1>@Model.Name</h1>
+</div>
+
+<div class="container main">
+    <div class="row">
+        <div class="col-7">
+            <div class="slider">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        @if (@Model.ImageProductss.ImageName != null)
+                        {
+                            <div class="swiper-slide">
+                                <a href="#" aria-label="slide" data-cate="0">
+                                    <img src="~/assetsAdmin/imgProducts/@Model.ImageProductss.ImageName" style="width:358px;height:358px" alt="">
+                                </a>
+                            </div>
+                        }
+                        else { }
+                        @if (@Model.ImageProductss.ImageName1 != null)
+                        {
+                            <div class="swiper-slide">
+                                <a href="#" aria-label="slide" data-cate="0">
+                                    <img src="~/assetsAdmin/imgProducts/@Model.ImageProductss.ImageName1" style="width:358px;height:358px" alt="">
+                                </a>
+                            </div>
+                        }
+                        else { }
+                        @if (@Model.ImageProductss.ImageName2 != null)
+                        {
+                            <div class="swiper-slide">
+                                <a href="#" aria-label="slide" data-cate="0">
+                                    <img src="~/assetsAdmin/imgProducts/@Model.ImageProductss.ImageName2" style="width:358px;height:358px" alt="">
+                                </a>
+                            </div>
+                        }
+                        else { }
+                        @if (@Model.ImageProductss.ImageName3 != null)
+                        {
+                            <div class="swiper-slide">
+                                <a href="#" aria-label="slide" data-cate="0">
+                                    <img src="~/assetsAdmin/imgProducts/@Model.ImageProductss.ImageName3" style="width:358px;height:358px" alt="">
+                                </a>
+                            </div>
+                        }
+                        else { }
+                        @if (@Model.ImageProductss.ImageName4 != null)
+                        {
+                            <div class="swiper-slide">
+                                <a href="#" aria-label="slide" data-cate="0">
+                                    <img src="~/assetsAdmin/imgProducts/@Model.ImageProductss.ImageName4" style="width:358px;height:358px" alt="">
+                                </a>
+                            </div>
+                        }
+                        else { }
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+
+            <div class="row" style=" margin-top: 3rem">
+                <div class="col" style="border-radius: 1rem; background: #f2f2f2; border: 1px solid;">
+                    <div class="article-content" style="padding-top: 20px;">
+                        <div id="showMore" class="blog-content">
+                            <h1 style="text-align: center; color: #d70018;"><strong>ĐẶC ĐIỂM NỔI BẬT</strong></h1>
+                            <h3 style="text-align: justify; margin-top: 20px; white-space: pre-line; line-height: 30px;"><b>@Model.Description</b></h3>
+                            @*<h3 style="text-align: justify;"><strong>Thiết kế phẳng, vuông vắn hơn với cụm camera tinh tế, nhiều màu sắc độc đáo</strong></h3>
+                            <p style="text-align: justify;">Điện thoại Redmi Note 11&nbsp;Pro+ có thiết kế thanh lịch và vuông vắn hơn, mặt trước và sau được vát phẳng hơn mang đến kiểu dáng hiện đại, hợp xu hướng. Bốn góc của smartphone vẫn được bo cong để hài hòa với tổng thể, mềm mại cũng như cầm nắm thoải mái.</p>
+                            <p style="text-align: justify;"><img class="cpslazy loaded" alt="Thiết kế phẳng hơn, vuông vắn hơn với cụm camera tinh tế, nhiều màu sắc độc đáo" data-src="https://cdn.cellphones.com.vn/media/wysiwyg/mobile/xiaomi/xiaomi-redmi-note-11-pro-plus-2_1.jpg" data-ll-status="loaded" src="../img/content2.jpg"></p>
+                            <p style="text-align: justify;">Cụm camera sau được đặt gọn trong khung chữ nhật với camera chính được làm nổi bật thu hút từ cái nhìn đầu tiên. Bên cạnh đó Xiaomi Redmi Note 11 Pro Plus cũng được ra mắt với nhiều màu sắc độc đáo cho bạn thỏa sức lựa chọn.</p>
+                            <h3 style="text-align: justify;"><strong>Màn hình lớn với công nghệ màn hình AMOLED 120Hz hiển thị sắc nét</strong></h3>
+                            <p style="text-align: justify;">Xiaomi Redmi Note 11 Pro+ được trang bị màn hình có kích thước lớn và tấm nền AMOLED Full HD+ cho hình ảnh không chỉ mang độ nét cao mà còn có màu sắc đẹp, sống động, rực rỡ trên một không gian hiển thị rộng rãi.</p>
+                            <p style="text-align: justify;"><img class="cpslazy loaded" alt="Smartphone màn hình lớn với công nghệ màn hình AMOLED 120Hz hiển thị sắc nét" data-src="https://cdn.cellphones.com.vn/media/wysiwyg/mobile/xiaomi/xiaomi-redmi-note-11-pro-plus-3_1.jpg" data-ll-status="loaded" src="../img/content3.jpg"></p>
+                            <p style="text-align: justify;">Bên cạnh đó, Xiaomi đã mang đến sự cải tiến khi mang đến cho màn hình Xiaomi Redmi Note 11 Pro Plus tần số quét 120Hz ấn tượng, cho trải nghiệm mượt mà, mọi thao tác vuốt chạm phản hồi nhanh hơn, hình ảnh được xử lý tốc độ cao, tránh tình trạng xé hình.</p>
+                            <h3 style="text-align: justify;"><strong>Âm thanh chất lượng mang lại trải nghiệm giải trí đỉnh cao</strong></h3>
+                            <p style="text-align: justify;">Không chỉ mang đến trải nghiệm tốt về phần nhìn, Xiaomi còn mang đến những trải nghiệm ấn tượng về phần nghe để người dùng có thể tận hưởng những bộ phim hay, chơi game sống động, chân thật hơn.</p>
+                            <p style="text-align: justify;"><img class="cpslazy loaded" alt="Hệ thống loa kép JBL, công nghệ Dolby Atmos, Hi-res Audio mang đến âm thanh cực tốt" data-src="https://cdn.cellphones.com.vn/media/wysiwyg/mobile/xiaomi/xiaomi-redmi-note-11-pro-plus-4_1.jpg" data-ll-status="loaded" src="../img/content4.jpg"></p>
+                            <h3 style="text-align: justify;"><strong>Cấu hình ấn tượng với chip MediaTek Dimensity 920 cùng RAM lớn</strong></h3>
+                            <p style="text-align: justify;">Mặc dù chỉ là smartphone thuộc phân khúc tầm trung nhưng sức mạnh của Xiaomi Redmi Note 11 Pro+ vẫn không hề thua kém các dòng cao cấp.&nbsp;Với chipset MediaTek Dimensity 920 được cải thiện cho hiệu suất tăng lên khoảng 9%, chơi game mượt mà, thao tác nhanh chóng mọi đa nhiệm mà không lo giật lag.</p>
+                            <p style="text-align: justify;"><img class="cpslazy loaded" alt="Cấu hình ấn tượng với chip Dimensity khỏe khoắn cùng RAM dung lượng lớn" data-src="https://cdn.cellphones.com.vn/media/wysiwyg/mobile/xiaomi/xiaomi-redmi-note-11-pro-plus-6_1.jpg" data-ll-status="loaded" src="../img/content4.jpg"></p>
+                            <p style="text-align: justify;">Ngoài ra Xiaomi Redmi Note 11 Pro Plus còn được trang bị RAM có dung lượng lớn cho hiệu suất ổn định trong thời gian dài. Bộ nhớ trong cũng có dung lượng cao, thoải mái cài đặt ứng dụng, trò chơi cũng như lưu trữ hàng nghìn tập tin.</p>
+                            <h3 style="text-align: justify;"><strong>Trải nghiệm nhiếp ảnh cực đỉnh với camera chính 108MP</strong></h3>
+                            <p style="text-align: justify;">Nếu bạn là một người yêu thích nhiếp ảnh, chắc chắn bạn sẽ không thể bỏ qua Xiaomi Redmi Note 11 Pro+. Smartphone được trang bị bộ 3 camera chất lượng cao với thông số cảm biến ấn tượng cho ảnh chụp sắc nét và hỗ trợ quay phim với chất lượng cao.</p>
+                            <p style="text-align: justify;"><img class="cpslazy loaded" alt="Trải nghiệm nhiếp ảnh cực đỉnh với bộ 4 camera hỗ trợ nhiều chế độ chụp ảnh" data-src="https://cdn.cellphones.com.vn/media/wysiwyg/mobile/xiaomi/xiaomi-redmi-note-11-pro-plus-5_1.jpg" data-ll-status="loaded" src="../img/content5.jpg"></p>
+                            <p style="text-align: justify;">Bên cạnh đó, camera Xiaomi Redmi Note 11 Pro Plus cũng hỗ trợ nhiều chế độ chụp ảnh như Panorama, HDR, xóa phông,…để bạn thỏa đam mê nhiếp ảnh.</p>
+                            <h3 style="text-align: justify;"><strong>Pin khủng tích hợp sạc nhanh USB-C với công suất 120W siêu tốt</strong></h3>
+                            <p style="text-align: justify;">Để có thể vận hành mượt mà với thời lượng lâu dài thì một viên pin dung lượng khủng là không thể thiếu trên Xiaomi Redmi Note 11 Pro+. Viên pin này có thể cho thời lượng sử dụng liên tục lên đến một ngày hoặc hơn một ngày nếu bạn chỉ sử dụng các tác vụ cơ bản.</p>
+                            <p style="text-align: justify;"><img class="cpslazy loaded" alt="Dung lượng pin khủng tích hợp sạc nhanh USB-C với công suất 120W siêu tốt" data-src="https://cdn.cellphones.com.vn/media/wysiwyg/mobile/xiaomi/xiaomi-redmi-note-11-pro-plus-1_1.jpg" data-ll-status="loaded" src="../img/content6.jpg"></p>
+                            <p style="text-align: justify;">Ngoài ra Xiaomi Redmi Note 11 Pro+ cũng được trang bị tính năng sạc nhanh qua cổng sạc USB Type-C, công suất sạc nhanh đến 120W, nạp pin nhanh chóng để bạn không mất quá nhiều thời gian sạc pin.</p>
+                            <h2 style="text-align: justify;"><strong>Điện thoại Redmi Note 11 Pro Plus giá bao nhiêu?</strong></h2>
+                            <p style="text-align: justify;">Có thể nói, Redmi Note 11 Pro Plus mang đến những trải nghiệm không thua gì một chiếc smartphone cao cấp nhưng lại trong một mức giá hấp dẫn.</p>
+                            <p style="text-align: justify;">Tại thị trường Việt Nam, Xiaomi Redmi Note 11 Pro+ hiện tại được ra mắt và mở bán. Đặc biệt sản phẩm được bán độc quyền, chính hãng tại CellphoneS với giá chỉ 9.990.000 đồng kèm theo nhiều ưu đãi khách hàng thành viên Smember, lên đời trợ giá.</p>
+                            <p style="text-align: justify;">Điện thoại Redmi Note 11 Pro Plus được ra mắt tại thị trường Trung Quốc vào ngày 9/3/2022. Về thời điểm ra mắt cụ thể tại Việt Nam có thông tin chính xác ngày ra mắt. Vì vậy, các tín đồ công nghệ đã được chiêm ngưỡng công nghệ mới và thiết kế nổi bật đến từ Redmi Note 11 Pro Plus.</p>
+                            <h2 style="text-align: justify;"><strong>Mua Redmi Note 11 Pro Plus chính hãng giá rẻ tại CellphoneS</strong></h2>
+                            <p style="text-align: justify;">Hiện tại bạn đã có thể đặt trước điện thoại<strong> Xiaomi Redmi Note 11 Pro Plus</strong> chính hãng với giá hấp dẫn tại CellphoneS để có thể rinh ngay mẫu smartphone này khi cập bến tại thị trường Việt Nam. Khi mua sản phẩm tại đây, bạn sẽ nhận được mức giá cực tốt, đi kèm nhiều ưu đãi khủng cùng chế độ bảo hành chính hãng 18 tháng và đổi mới trong 30 ngày đầu tiên.</p>*@
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-4">
+            <div class="box-right">
+                <div class="price-one">
+                    <div class="box-price">
+                        <h1 style="margin-bottom: 15px;">@Model.Name</h1>
+                        <p class="box-price-present">Giá: @Model.Price.ToString("#,##0") ₫
+                            <span style="font-weight: 500; margin-left: 10px; text-decoration: line-through; color: #7a7a7a; ">
+                                @Model.ListedPrice.ToString("#,##0") ₫
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="box-shopping">
+                    <div class="btn-buynow">
+                        @if (Model.Stock > 0)
+                        {
+                            <div class="btn-buy">
+                                <a class="b-buyx" asp-controller="Carts" asp-action="AddNow" asp-route-id="@Model.Id">
+                                    MUA NGAY
+                                    <p style="margin-top: 2px;">(Giao tận nơi)</p>
+                                </a>
+                            </div>
+                            <div class="btn-cart">
+                                <a class="b-cartx" asp-controller="Carts" asp-action="Add" asp-route-id="@Model.Id">THÊM VÀO GIỎ HÀNG</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="btn-buy">
+                                <a class="b-buyx" href="#">
+                                    SẢN PHẨM ĐÃ HẾT HÀNG <i class="far fa-frown"></i>
+                                </a>
+                            </div>
+                            <div class="btn-cart">
+                                <a class="b-cartx" asp-controller="Home" asp-action="Index">XEM THÊM SẢN PHẨM KHÁC</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @*<div class="hotline">
+                    Gọi đặt mua
+                    <a href="tel:18001234">1800.1234 </a>(7:30 - 22:00)
+                </div>*@
+
+                @*<div class="box-tskt">
+                    <h1 style="margin: 10px 0 10px 0;">Thông số kỹ thuật</h1>
+                    <table id="tskt">
+                        <tbody>
+                            <tr>
+                                <th>Kích thước màn hình</th>
+                                <th>6.67 inches</th>
+                            </tr>
+                            <tr>
+                                <th>Hệ điều hành:</th>
+                                <th>Android 11</th>
+                            </tr>
+                            <tr>
+                                <th>Camera sau:</th>
+                                <th>Chính 64 MP & Phụ 2 MP, 2 MP</th>
+                            </tr>
+                            <tr>
+                                <th>Camera trước:</th>
+                                <th>16 MP</th>
+                            </tr>
+                            <tr>
+                                <th>Chip:</th>
+                                <th>Snapdragon 695 5G 8 nhân</th>
+                            </tr>
+                            <tr>
+                                <th>RAM:</th>
+                                <th>8 GB</th>
+                            </tr>
+                            <tr>
+                                <th>Bộ nhớ trong:</th>
+                                <th>128 GB</th>
+                            </tr>
+                            <tr>
+                                <th>Pin, Sạc:</th>
+                                <th>4500 mAh33 W</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>*@
+
+                <div class="box-ttsp">
+                    <div class="ttsp">
+                        <h1 style="margin: 10px 0 10px 0;">Thông tin sản phẩm</h1>
+                        <ul class="ttsp-items">
+                            @*<li>
+                                <i class='bx bx-heart' style="font-size: 25px;"></i> <p>@Model.Description</p>
+                            </li>*@
+                            <li>
+                                <i class='bx bx-mobile-alt' style="font-size: 25px;"></i> <p>Máy mới 100% , chính hãng @Model.ProductType.Name Việt Nam. Đầy đủ phụ kiện từ nhà sản xuất</p>
+                            </li>
+                            <li>
+                                <i class='bx bx-package' style="font-size: 25px;"></i> <p>Máy, ốp lưng, cáp sạc, củ sạc 120W.</p>
+                            </li>
+                            <li>
+                                <i class='bx bx-check-shield' style="font-size: 25px;"></i> <p>
+                                    Bảo hành 12 tháng tại trung tâm bảo hành Chính hãng. 1 đổi 1 trong 30 ngày nếu có lỗi phần cứng từ nhà sản xuất.
+                                    @*<a href="#">(xem chi tiết)</a>*@
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rating-count">
+                        <div class="rating-count-details-content">
+                            @if (totalRating == 0)
+                            {
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                            }
+                            @if (totalRating == 1)
+                            {
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                            }
+                            @if (totalRating == 2)
+                            {
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                            }
+                            @if (totalRating == 3)
+                            {
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                            }
+                            @if (totalRating == 4)
+                            {
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star unchecked"></i>
+                            }
+                            @if (totalRating == 5)
+                            {
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                                <i class="fas fa-star checked"></i>
+                            }
+                        </div>
+                        <p style="font-size: 20px;">(@ratingCount lượt đánh giá)</p>
+                    </div>
+                </div>
+                @foreach (var c in comments)
+                {
+                    <hr />
+                    <div class="seeding-cmt">
+                        <div class="cmt">
+                            <div class="row">
+                                <div class="comment-user" style="display: flex; justify-content: space-between;">
+                                    <span style="font-weight: bold; font-size: 18px;display: flex;align-items: center;">
+                                        @c.Email<i class="fas fa-check-circle" style="margin-left:3px;font-size:13px;color:dodgerblue"></i>
+                                    </span>
+                                    <span style="font-size: 12px;">@c.CreatedAt</span>
+                                </div>
+                                <div class="comment-rating" style="margin-top: 5px;display:flex;justify-content:space-between">
+                                    <span>
+                                        @for (var i = 1; i <= c.Rating; i++)
+                                        {
+                                            @*<span class="starGlowN"></span>*@
+                                            <i class="fas fa-star checked"></i>
+                                        }
+                                        @for (var i = (c.Rating + 1); i <= 5; i++)
+                                        {
+                                            @*<span class="starFadeN"></span>*@
+                                            <i class="fas fa-star unchecked"></i>
+                                        }
+                                    </span>
+
+                                    <div class="comment-action" style="display: flex; justify-content: flex-end; align-items: center;">
+                                        <div class="dropdown-action" style="float:left;">
+                                            <button class="dropbtn-action"><i class="fas fa-ellipsis-h"></i></button>
+                                            <div class="dropdown-content-action" style="left:0;">
+                                                <form asp-controller="Comments" asp-action="Delete" asp-route-id="@c.Id" onclick="return confirm('Bạn có muốn xóa bình luận này?')" class="d-inline">
+                                                    <button type="submit" title="Xóa" style="border: none; background: none; cursor: pointer; color: red;">Xóa</button>
+                                                </form>
+                                                @*<form asp-controller="Comments" asp-action="Delete" asp-route-id="@c.Id" onclick="return confirm('Bạn có muốn xóa bình luận này?')" class="d-inline">
+                                                    <button type="submit" title="Chỉnh sửa" style="border: none; background: none; cursor: pointer;color: blue; ">Chỉnh sửa</button>
+                                                </form>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="comment-content">
+                                    <span>@Html.Raw(c.ContentComment.Replace("\n", "<br />"))</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                <button type="button" class="collapsible">Viết đánh giá <i class="far fa-star"></i></button>
+                <div class="content">
+                    @Html.Partial("_CommentBox")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function SCRate() {
+        for (var i = 1; i <= @totalRating; i++) {
+            $("#sRate" + i).attr('class', 'fas fa-star checked');
+        }
+    }
+    $(function(){
+        SCRate();
+    });
+   @* function confirmDelete(uniqueId, isDeleteClicked, e) {
+        var deleteSpan = 'deleteSpan_' + uniqueId;
+        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
+
+        if (isDeleteClicked) {
+            $('#' + deleteSpan).hide();
+            $('#' + confirmDeleteSpan).show();
+        } else {
+            $('#' + deleteSpan).show();
+            $('#' + confirmDeleteSpan).hide();
+        }
+    }*@
+</script>
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+</script>

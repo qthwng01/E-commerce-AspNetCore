@@ -1,0 +1,232 @@
+﻿@model Tuple<DA_TOTNGHIEP.Models.Invoices, IEnumerable<DA_TOTNGHIEP.Models.Carts>>
+
+@{
+    ViewData["Title"] = "Pay";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<style>
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background: #e2e3e5;
+        display: inline-block;
+        color: #000;
+        border-radius: 3px 3px 0px 0px;
+        margin-top: 1rem;
+    }
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab,
+    #three:checked ~ .tabs #three-tab {
+        background: #71c2f4;
+        color: #fff;
+        border-top: 3px solid #32557f;
+    }
+</style>
+<!-- Start Ads -->
+<section class="main-home" id="cart-all">
+    <div class="container section-detail">
+        <ul class="breadcumb">
+            <li>
+                <a asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+                <meta property="position" content="1">
+            </li>
+            <li>
+                <span>›</span>
+                <a asp-controller="Carts" asp-action="Index">Giỏ hàng</a>
+                <meta property="position" content="2">
+            </li>
+            <li>
+                <span>›</span>
+                <a asp-controller="Carts" asp-action="Pay">Thông tin đặt hàng</a>
+                <meta property="position" content="3">
+            </li>
+        </ul>
+    </div>
+
+    <div class="body-cart">
+        <div class="header-cart">
+            <div class="go-back-cart">
+                <i class="fas fa-angle-left"></i>
+                <a style="color: #d70018;" asp-controller="Home" asp-action="Index">
+                    <p class="title-back">Trở về trang chủ</p>
+                </a>
+            </div>
+            </a>
+            <p class="title-cart">
+                Thông tin đặt hàng
+            </p>
+        </div>
+        <div class="main-cart">
+            <div class="row">
+                @* Đổ data vào*@
+                @foreach (var item in Model.Item2)
+                {
+                    <div class="container container-cart">
+                        <div class="cart-product">
+                            <div class="cart-product-image">
+                                <img src="~/assetsAdmin/imgProducts/@item.Product.ImageProductss.ImageName" alt="">
+                            </div>
+                            <div class="cart-product-content">
+                                <div class="cart-product-name">@item.Product.Name</div>
+                                <div class="cart-product-price">
+                                    <p class="cart-special-price">@item.Product.Price.ToString("#,##VNĐ")</p>
+                                    <p class="cart-old-price">@item.Product.Price.ToString("#,##VNĐ")</p>
+                                </div>
+                                <div class="cart-product-quantity">
+                                    <label for="tentacles">Số lượng: </label>
+                                    <input type="text" disabled min="1" max="30" asp-for="@item.Quantity">
+                                </div>
+                                <div class="cart-product-description" style="max-width: 280px; ">
+                                    <p class="label-description">Mô tả: </p>
+                                    <p class="content-description">@item.Product.Description</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @* Đổ data vào*@
+
+            <div class="container container-payment">
+                <div class="warpper">
+                    <input class="radio" id="one" name="group" type="radio" checked>
+                    <input class="radio" id="two" name="group" type="radio">
+                    <input class="radio" id="three" name="group" type="radio">
+
+                    <div class="tabs" style="display:flex">
+                        <label class="tab" id="one-tab" for="one"><img src="~/assetsUser/img/money.jpg" style="width:10%;" /><h4 style="margin: -20px 0 21px 65px;">Thanh toán tiền mặt</h4></label>
+                        <label class="tab" id="two-tab" for="two"><img src="~/assetsUser/img/momo.png" style="width:10%;" /><h4 style="margin: -25px 0 21px 65px;">Thanh toán Momo</h4></label>
+                    </div>
+
+                    <div class="panels">
+                        <div class="panel" id="one-panel">
+                            <form asp-action="Pay" method="post">
+                                <div class="row">
+                                    <div class="container container-payment-info-main">
+                                        <div class="customer-info">
+                                            <p class="title-customer-info">
+                                                Thông tin khách hàng
+                                            </p>
+
+                                            <div class="input-customer-info">
+                                                <input asp-for="Item1.Email" type="email" placeholder="Email (Vui lòng điền email để nhận thông báo)" value="@ViewBag.EmailUser" readonly>
+                                                <input asp-for="Item1.Fullname" type="text" placeholder="Họ và tên (bắt buộc)" required>
+                                                <input asp-for="Item1.ShippingPhone" type="text" placeholder="Số điện thoại (bắt buộc)" required>
+                                            </div>
+                                        </div>
+                                        <div class="transaction-method">
+                                            <p class="title-transaction-method">
+                                                Địa chỉ giao hàng
+                                            </p>
+
+                                            <div class="street-name">
+                                                <input asp-for="Item1.ShippingAddress" type="text" placeholder="Số nhà, tên đường, ..." style="border: 1px solid;border-radius: 4px;padding: 12px; width: 53rem;margin-bottom:2rem;" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="container container-payment-info">
+                                    <div class="content-payment-info">
+                                        <p class="label-total">
+                                            Tổng tiền tạm tính:
+                                        </p>
+                                        <p class="total">
+                                            @if (Model.Item2.Count() > 0)
+                                            {
+                                                @ViewBag.getTotalByUserId.ToString("#,##VNĐ")
+                                            }
+                                        </p>
+                                    </div>
+
+                                    <div class="content-order">
+                                        <input type="submit" name="" id="" value="THANH TOÁN KHI NHẬN HÀNG" style="
+                                            padding: 20px;
+                                            width: 50rem;
+                                            border: 1px solid white;
+                                            border-radius: 6px;
+                                            background: #d70018;
+                                            margin-bottom: 1rem;
+                                            color: white;
+                                            font-size: 22px;
+                                            font-weight: 700;
+                                            cursor:pointer;
+                                        ">
+                                        <a asp-action="Index" asp-controller="Carts">
+                                            <div class="button-other">
+                                                Thay đổi giỏ hàng
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel" id="two-panel">
+                            <form asp-action="PayMomo" method="post">
+                                <div class="row">
+                                    <div class="container container-payment-info-main">
+                                        <div class="customer-info">
+                                            <p class="title-customer-info">
+                                                Thông tin khách hàng
+                                            </p>
+
+                                            <div class="input-customer-info">
+                                                <input asp-for="Item1.Email" type="email" placeholder="Email (Vui lòng điền email để nhận thông báo)" value="@ViewBag.EmailUser" readonly>
+                                                <input asp-for="Item1.Fullname" type="text" placeholder="Họ và tên (bắt buộc)" required>
+                                                <input asp-for="Item1.ShippingPhone" type="text" placeholder="Số điện thoại (bắt buộc)" required>
+                                            </div>
+                                        </div>
+                                        <div class="transaction-method">
+                                            <p class="title-transaction-method">
+                                                Địa chỉ giao hàng
+                                            </p>
+
+                                            <div class="street-name">
+                                                <input asp-for="Item1.ShippingAddress" type="text" placeholder="Số nhà, tên đường, ..." style="border: 1px solid;border-radius: 4px;padding: 12px; width: 53rem;margin-bottom:2rem;" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="container container-payment-info">
+                                    <div class="content-payment-info">
+                                        <p class="label-total">
+                                            Tổng tiền tạm tính:
+                                        </p>
+                                        <p class="total">
+                                            @if (Model.Item2.Count() > 0)
+                                            {
+                                                @ViewBag.getTotalByUserId.ToString("#,##VNĐ")
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="content-order">
+                                        <input type="submit" name="" id="" value="THANH TOÁN QUA MOMO" style="
+                                        padding: 20px;
+                                        width: 50rem;
+                                        border: 1px solid white;
+                                        border-radius: 6px;
+                                        background: #d70018;
+                                        margin-bottom: 1rem;
+                                        color: white;
+                                        font-size: 22px;
+                                        font-weight: 700;
+                                        cursor:pointer;
+                                    ">
+                                        <a asp-action="Index" asp-controller="Carts">
+                                            <div class="button-other">
+                                                Thay đổi giỏ hàng
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!-- End Ads -->

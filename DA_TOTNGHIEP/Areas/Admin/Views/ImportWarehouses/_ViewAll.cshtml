@@ -1,0 +1,133 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.ImportWarehouse>
+
+@{
+    ViewData["Title"] = "ViewAll";
+}
+
+<h3>Danh sách phiếu nhập kho</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","ImportWarehouses",null,Context.Request.Scheme)','Tạo loại sản phẩm')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Tạo phiếu nhập kho</h5></a>
+            <form asp-controller="ImportWarehouses" asp-action="Index" method="get" style="display:inline;margin-left:12rem;">
+                <div style="display:flex">
+                    <div style="margin-top:1rem">
+                        <div>
+                            <div>
+                                <span style=" font-weight: 700;">Thông tin:</span><input type="text" name="SearchString" placeholder="Nhập mã, tên..." class="input-css" style="border: 1px solid #dce7f1;border-radius: .25rem;padding: 6px;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem;margin-left:1rem">
+                        <span style=" font-weight: 700;">Từ ngày:</span> <input type="date" id="birthdaytime" name="fromDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                        <span style=" font-weight: 700;">đến ngày:</span> <input type="date" id="birthdaytime" name="toDate" style="
+                                    border: 1px solid;
+                                    border-radius: 7px;
+                                    padding: 8px;
+                                ">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger" style="margin-top:1rem">Tìm kiếm <i class="fas fa-search"></i></button>
+            </form>
+            <div class="scrollmenu" style="overflow: auto; white-space: nowrap;height:700px">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Code)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SupplierCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Supplier)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ProductName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Shipment)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Stock)
+                                </th>
+                                @*<th>
+            @Html.DisplayNameFor(model => model.WarehouseId)
+        </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedAt)
+                                </th>
+                                @*<th>
+            @Html.DisplayNameFor(model => model.Product)
+        </th>*@
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() != 0)
+                            {
+                                int stt = 1;
+                                @foreach (var item in Model)
+                                {
+                            <tr>
+                                <td>
+                                    @(stt++)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SupplierCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Shipment)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                @*<td>
+            @Html.DisplayFor(modelItem => item.WarehouseId)
+        </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                                </td>
+                                <td>
+                                    <div>
+                                        <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Edit","ImportWarehouses",new {id=item.Id})','Update')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                        <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                            <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" style="color:crimson">Không có dữ liệu ! <i class="far fa-frown"></i>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

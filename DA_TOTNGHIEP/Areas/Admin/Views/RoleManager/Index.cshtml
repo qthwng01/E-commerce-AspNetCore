@@ -1,0 +1,33 @@
+﻿@model List<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+    ViewData["Title"] = "Role Manager";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h1>Quản lí quyền truy cập</h1>
+<div class="card" style="padding:1rem;">
+    <form method="post" asp-action="AddRole" asp-controller="RoleManager">
+        <div class="input-group" style="width:27%">
+            <input name="roleName" class="form-control w-25" placeholder="Nhập tên quyền">
+            <span class="input-group-btn">
+                <button class="btn btn-info">Tạo quyền</button>
+            </span>
+        </div>
+    </form>
+    <table class="table table-striped" >
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Quyền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@role.Id</td>
+                    <td>@role.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

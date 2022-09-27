@@ -1,0 +1,107 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.Warehouse>
+
+@{
+    ViewData["Title"] = "ViewAll";
+}
+
+<h3>Danh sách phiếu nhập, lô vào kho</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","Warehouses",null,Context.Request.Scheme)','Tạo kho')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Thêm phiếu nhập vào kho</h5></a>
+            <div class="scrollmenu" style="overflow: auto; white-space: nowrap;">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Stock)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.OnStock)
+                                </th>
+                                @*<th>
+            @Html.DisplayNameFor(model => model.ImportWarehouse.Color)
+        </th>*@
+                                @*<th>
+            @Html.DisplayNameFor(model => model.ImportWarehouse.Shipment)
+        </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ImportWarehouse)
+                                </th>
+                                @* <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Note)
+        </th>*@
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int stt = 1;}
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @(stt++)
+                                </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </th>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                @if (item.ProductId != null)
+                                {
+                                    <td>
+                                        @item.Product.Stock
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ImportWarehouse.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Note)
+                                </td>
+                                @*<td>
+            @Html.DisplayFor(modelItem => item.Shipment.ProductName)
+        </td>*@
+                                <td>
+                                    <div>
+                                        <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Edit","Warehouses",new {id=item.Id})','Update')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                        <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                            <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

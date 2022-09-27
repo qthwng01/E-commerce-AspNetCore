@@ -1,0 +1,160 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.Products>
+@{
+    ViewData["Title"] = "ViewAll";
+}
+<h3>Danh sách sản phẩm</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","Products",null,Context.Request.Scheme)','Thêm Sản Phẩm')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Tạo sản phẩm</h5></a>
+            <form asp-controller="Products" asp-action="Index" method="get" style="display:inline;margin-left:12rem;">
+                <div style="margin-top:1rem">
+                    <fieldset class="form-group d-inline-flex pr-2">
+                        <div style="margin-right: 1rem;">
+                            <span style=" font-weight: 700;">Thông tin:</span>
+                            <div>
+                                <input type="text" name="SearchName" placeholder="Nhập tên sản phẩm" class="input-css" style="border: 1px solid #dce7f1;border-radius: .25rem;padding: 6px;" />
+                            </div>
+                        </div>
+                        <div style="margin-right: 1rem;">
+                            <span style=" font-weight: 700;">Loại sản phẩm:</span>
+                            <select class="form-select mr-1" id="basicSelect" name="SearchType">
+                                <option value="">Tất cả</option>
+                                <option value="Apple">Apple</option>
+                                <option value="SamSung">SamSung</option>
+                                <option value="Xiaomi">Xiaomi</option>
+                                <option value="Oppo">Oppo</option>
+                                <option value="Nokia">Nokia</option>
+                            </select>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <button type="submit" class="btn btn-danger">Tìm kiếm <i class="fas fa-search"></i></button>
+            </form>
+            <div class="scrollmenu" style="overflow: scroll; white-space: nowrap; height: 700px; ">
+                <div class="table-responsive" style="overflow-x:unset !important;">
+                    <table class="table table-hover mb-0">
+                        <thead style="color:#000">
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Sku)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Price)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListedPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Stock)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ImageProductId)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ProductType)
+                                </th>
+                                @*<th>
+                                    @Html.DisplayNameFor(model => model.Shipments)
+                                </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Warehouse)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() != 0)
+                            {
+                                int stt = 1;
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(stt++)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Sku)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+                                        <td>
+                                            @item.Price.ToString("#,##0 ₫")
+                                        </td>
+                                        <td>
+                                            @item.ListedPrice.ToString("#,##0 ₫")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Stock)
+                                        </td>
+                                        <td>
+                                            <img src="~/assetsAdmin/imgProducts/@Html.DisplayFor(modelItem => item.ImageProductss.ImageName)" style="width: 130px;height:130px" alt="" />
+                                            <a onclick="showInPopup('@Url.Action("DetailImages", "ImageProducts", new { id = item.ImageProductss.Id })','Details')" style="cursor:pointer"><span class="badge bg-secondary">Xem thêm</span></a>
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductType.Name)
+                                        </td>
+                                        @*<td>
+                                        @Html.DisplayFor(modelItem => item.Shipments.Shipment)
+                                    </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Warehouse.Name)
+                                        </td>
+                                        @if (item.Status == true)
+                                        {
+                                            <td><span class="badge bg-success">Active</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge bg-danger">UnActive</span></td>
+                                        }
+                                        <td>
+                                            <div>
+                                                <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Edit","Products",new {id=item.Id})','Update')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                                <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                                    <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" style="color:crimson">Không có dữ liệu ! <i class="far fa-frown"></i>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.Carts>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<!-- Start Ads -->
+<section class="main-home" id="cart-all">
+    <div class="container section-detail">
+        <ul class="breadcumb">
+            <li>
+                <a asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+                <meta property="position" content="1">
+            </li>
+            <li>
+                <span>›</span>
+                <a asp-controller="Carts" asp-action="Index">Giỏ hàng</a>
+                <meta property="position" content="2">
+            </li>
+        </ul>
+    </div>
+
+    <div class="body-cart">
+        <div class="header-cart">
+            <div class="go-back-cart">
+                <i class="fas fa-angle-left"></i>
+                <a style="color: #d70018;" asp-controller="Home" asp-action="Index">
+                    <p class="title-back">Trở về trang chủ</p>
+                </a>
+            </div>
+            </a>
+            <p class="title-cart">
+                Giỏ Hàng
+            </p>
+        </div>
+        <div class="main-cart">
+            <div class="row">
+                @* Đổ data vào*@
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var item in Model)
+                    {
+
+                        <div class="container container-cart">
+                            @*Nút xoá sản phẩm*@
+                            <form asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Bạn muốn xoá sản phẩm này?');" onsubmit="return deleteCart(this)" style="float:right;margin-top:1rem;">
+                                <button type="submit" title="Xóa" style="border: none; background: none;cursor:pointer;"><i class="fas fa-trash" style="font-size:15px;"></i></button>
+                            </form>
+
+
+                            <div class="cart-product">
+                                <div class="cart-product-image">
+                                    <img src="~/assetsAdmin/imgProducts/@item.Product.ImageProductss.ImageName" alt="">
+                                </div>
+                                <div class="cart-product-content">
+                                    <div class="cart-product-name">@item.Product.Name</div>
+                                    <div class="cart-product-price">
+                                        <p class="cart-special-price">@item.Product.Price.ToString("#,##VNĐ")</p>
+                                        <p class="cart-old-price">@item.Product.ListedPrice.ToString("#,##VNĐ")</p>
+                                    </div>
+                                    <div class="cart-product-quantity">
+                                        <label for="tentacles">Chọn số lượng: </label>
+                                        @if (item.Quantity <= 1)
+                                        {
+                                            <form style="display:inline;" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Bạn muốn xoá sản phẩm này?');" onsubmit="return deleteCart(this)">
+                                                <button style="border:none;background:none;color:blue;cursor:pointer;" type="submit" title="Giảm"><i class="fas fa-minus" style="font-size:15px;"></i></button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <a style="color:blue" title="Giảm" asp-controller="Carts" asp-action="Remove" asp-route-id="@item.Product.Id"><i class="fas fa-minus"></i></a>
+                                        }
+                                        <input type="text" disabled min="1" max="30" asp-for="@item.Quantity">
+                                        <a style="color:blue" title="Thêm" asp-controller="Carts" asp-action="UpdateCart" asp-route-id="@item.Product.Id"><i class="fas fa-plus"></i></a>
+                                    </div>
+                                    <div class="cart-product-description" style="max-width: 280px; ">
+                                        <p class="label-description">Mô tả: </p>
+                                        <p class="content-description" style="white-space: pre-line;">@item.Product.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div style="text-align: center; line-height: 50px;">
+                        <i class="fas fa-frown" style="font-size: 40px;"></i>
+                        <p style=" font-size: 20px; font-weight: 700;">Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại!</p>
+                        <a asp-controller="Home" asp-action="Index" style="font-size: 16px; font-weight: 500; color: #fff;
+                        border-radius: 1rem; background: #d70018; padding: 10px;">
+                            Quay lại trang chủ
+                        </a>
+                    </div>
+                }
+            </div>
+            @* Đổ data vào*@
+            @if (Model.Count() > 0)
+            {
+                <div class="container container-payment">
+                    @ViewBag.ErrorMessage<br />
+                    <div class="content-payment">
+                        <p class="label-total">
+                            Tổng tiền tạm tính:
+                        </p>
+                        <p class="total">
+                            @if (Model.Count() > 0)
+                            {
+                                @ViewBag.getTotalByUserId.ToString("#,##VNĐ")
+                            }
+                        </p>
+                    </div>
+                    <div class="content-order">
+                        <a asp-controller="Carts" asp-action="Pay">
+                            <div class="button-payment">
+                                Tiến hành đặt hàng
+                            </div>
+                        </a>
+                        <a asp-controller="Home" asp-action="Index">
+                            <div class="button-other">
+                                Chọn thêm sản phẩm khác
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            { }
+        </div>
+    </div>
+
+</section>
+
+

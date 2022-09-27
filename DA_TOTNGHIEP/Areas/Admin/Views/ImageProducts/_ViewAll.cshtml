@@ -1,0 +1,95 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.ImageProduct>
+@{
+    ViewData["Title"] = "ViewAll";
+}
+<h3>Danh sách hình ảnh sản phẩm</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","ImageProducts",null,Context.Request.Scheme)','Thêm ImageProducts')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Tạo hình ảnh</h5></a>
+            <div class="scrollmenu" style="overflow-x: auto; overflow-y: auto; white-space: nowrap;height:700px">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="color:#000">
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CodeImage)
+                                </th>
+                                <th>
+                                    @*@Html.DisplayNameFor(model => model.ImageName)*@
+                                    Hình ảnh sản phẩm
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() != 0)
+                            {
+                                int stt = 1;
+                                @foreach (var item in Model)
+                                {
+                            <tr>
+                                <td>
+                                    @(stt++)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CodeImage)
+                                </td>
+                                @if (@item.ImageName != null)
+                                {
+                                    <td>
+                                        <img src="~/assetsAdmin/imgProducts/@item.ImageName" style="width: 130px;height: 130px" alt="" />
+                                        <a onclick="showInPopup('@Url.Action("DetailImages","ImageProducts",new {id=item.Id})','Details')" style="cursor:pointer"><span class="badge bg-secondary">Xem thêm</span></a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                @if (item.Status == true)
+                                {
+                                    <td><span class="badge bg-success">Active</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge bg-danger">UnActive</span></td>
+                                }
+                                <td>
+                                    <div>
+                                        <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Edit","ImageProducts",new {id=item.Id})','Update')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                        <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                            <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" style="color:crimson">Không có dữ liệu ! <i class="far fa-frown"></i>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

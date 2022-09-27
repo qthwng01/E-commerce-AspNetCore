@@ -1,0 +1,162 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Invoices>, IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "MyRank Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<style>
+    .myorder-content {
+        display: none;
+    }
+
+    @*Load More*@
+    #loadMoreMyOrder {
+        font-size: 15px;
+        font-weight: 500;
+        width: 220px;
+        color: #000;
+        display: block;
+        text-align: center;
+        margin: 20px auto;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #000;
+        background-color: #fff;
+        transition: .3s;
+    }
+
+        #loadMoreMyOrder:hover {
+            color: #d70018;
+            background-color: #fef2f2;
+            border: 1px solid #d70018;
+            text-decoration: none;
+        }
+
+    .noContentMyOrder {
+        color: #000 !important;
+        background-color: transparent !important;
+        pointer-events: none;
+    }
+
+    @*End Load More*@
+    @*Tabs*@
+    /* Style the tab */
+    .tab {
+        display: flex;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: #a5a5a5;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 20px 0px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #707070;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #d70018;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    @*EndTabs*@
+    #button-huydonhang {
+        text-transform: capitalize;
+        width: 130px;
+        border: 1px solid;
+        border-radius: 1rem;
+        padding: 5px;
+        background: #a5a5a5;
+        color: #fff;
+    }
+        #button-huydonhang:hover {
+            background: #d70018;
+            color: #fff;
+        }
+    .tracuuhoadon {
+        background: #ffd3d3;
+        border: 1px solid;
+        border-radius: 1rem;
+        padding: 5px;
+        font-weight: bold;
+        color: #d70018;
+    }
+</style>
+
+<div class="container section-detail">
+    <ul class="breadcumb">
+        <li>
+            <a asp-area="" asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+            <meta property="position" content="1">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index">Hồ sơ</a>
+            <meta property="position" content="2">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-area="" asp-controller="Home" asp-action="MyRank">Thông tin thành viên</a>
+            <meta property="position" content="3">
+        </li>
+    </ul>
+</div>
+
+<div class="login-page" style="padding:0%">
+    <div class="form" style="max-width:50%">
+        <div style="display: flex; justify-content: space-between; align-items: center; color: #d70018; ">
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" style="color: #d70018;"><h2 style="margin-bottom:1rem"><i class="fas fa-angle-left"></i> Quay lại hồ sơ</h2></a>
+            <h1 style="margin-bottom:1rem">Thông tin thành viên</h1>
+            <p></p>
+        </div>
+        <div>
+            @if (SignInManager.IsSignedIn(User))
+            {
+
+                @foreach (var itemproduct in Model.Item1.Where(i => i.StatusId == 4).Take(1))
+                {
+                    int sumPrice = 0;
+                    @foreach (var itemproducts in Model.Item2.Where(i => i.Invoice.StatusId == 4))
+                    {
+                        <div style="display:none"> @(sumPrice += itemproducts.UnitPrice * itemproducts.Quantity)</div>
+                    }
+                    @if (sumPrice >= 200000000)
+                    {
+                        <div style="margin-top: 3rem;">
+                            <h1>Bạn hiện là thành viên <img src="~/assetsUser/img/vip.png" style="height: 33px; width: 33px;" /> của C&T Phone Shop</h1>
+                            <h4 style="margin-top: 1rem;">(Bạn sẽ nhận được nhiều ưu đãi khi là thành viên VIP)</h4>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="margin-top: 3rem;">
+                            <h1>Bạn hiện là thành viên thường của C&T Phone Shop</h1>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        </div>
+</div>
+

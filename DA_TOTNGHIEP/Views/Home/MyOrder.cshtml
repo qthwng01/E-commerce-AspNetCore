@@ -1,0 +1,461 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Invoices>, IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "MyOrder Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<style>
+    .myorder-content {
+        display: none;
+    }
+
+    @*Load More*@
+    #loadMoreMyOrder {
+        font-size: 15px;
+        font-weight: 500;
+        width: 220px;
+        color: #000;
+        display: block;
+        text-align: center;
+        margin: 20px auto;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #000;
+        background-color: #fff;
+        transition: .3s;
+    }
+
+        #loadMoreMyOrder:hover {
+            color: #d70018;
+            background-color: #fef2f2;
+            border: 1px solid #d70018;
+            text-decoration: none;
+        }
+
+    .noContentMyOrder {
+        color: #000 !important;
+        background-color: transparent !important;
+        pointer-events: none;
+    }
+
+    @*End Load More*@
+    @*Tabs*@
+    /* Style the tab */
+    .tab {
+        display: flex;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: #a5a5a5;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 20px 0px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #707070;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #d70018;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    @*EndTabs*@
+    #button-huydonhang {
+        text-transform: capitalize;
+        width: 130px;
+        border: 1px solid;
+        border-radius: 1rem;
+        padding: 5px;
+        background: #a5a5a5;
+        color: #fff;
+    }
+        #button-huydonhang:hover {
+            background: #d70018;
+            color: #fff;
+        }
+    .tracuuhoadon {
+        background: #ffd3d3;
+        border: 1px solid;
+        border-radius: 1rem;
+        padding: 5px;
+        font-weight: bold;
+        color: #d70018;
+    }
+</style>
+<div class="container section-detail">
+    <ul class="breadcumb">
+        <li>
+            <a asp-area="" asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+            <meta property="position" content="1">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index">Hồ sơ</a>
+            <meta property="position" content="2">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-area="" asp-controller="Home" asp-action="MyOrder">Thông tin đơn hàng</a>
+            <meta property="position" content="3">
+        </li>
+    </ul>
+</div>
+
+<div class="login-page" style="padding:0%">
+    <div class="form" style="max-width:50%">
+        <div style="display: flex; justify-content: space-between; align-items: center; color: #d70018; ">
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" style="color: #d70018;"><h2 style="margin-bottom:1rem"><i class="fas fa-angle-left"></i> Quay lại hồ sơ</h2></a>
+            <h1 style="margin-bottom:1rem">Thông tin đơn hàng</h1>
+            <p></p>
+        </div>
+
+        <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'Chờ duyệt')" id="defaultOpen">Chờ duyệt(@Model.Item1.Where(m => m.StatusId == 0).Count())</button>
+            <button class="tablinks" onclick="openCity(event, 'Đang giao')">Đang giao(@Model.Item1.Where(m => m.StatusId == 1).Count())</button>
+            <button class="tablinks" onclick="openCity(event, 'Đã giao')">Đã giao(@Model.Item1.Where(m => m.StatusId == 4).Count())</button>
+            <button class="tablinks" onclick="openCity(event, 'Đã hủy')">Đã hủy(@Model.Item1.Where(m => m.StatusId == 2).Count())</button>
+            <button class="tablinks" onclick="openCity(event, 'Tất cả')">Tất cả(@Model.Item1.Where(m => m.StatusId != 3).Count())</button>
+        </div>
+
+        <div id="Chờ duyệt" class="tabcontent">
+            <div style="margin-top:1rem;">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (Model.Item1.Where(m => m.StatusId == 0).Count() > 0) {
+                    @foreach (var item in Model.Item1.Where(m => m.StatusId == 0))
+                    {
+                        <!--Thông tin tra cứu-->
+                        <div class="myorder-content-choduyet">
+                            <div style="display: flex; justify-content: center; align-items: center;">
+                                <div class="border-badge" style=" width: 25%;">
+                                    <p style="display: contents;font-weight: 600;font-size: 15px;">
+                                        ĐƠN HÀNG<span style="font-size: 15px; font-weight: bold; background: none; color: #1a73e8;">
+                                            @item.Code
+                                        </span>
+                                    </p>
+                                    <form asp-area="Admin" asp-controller="Invoices" asp-action="EditPendingHome" asp-route-id="@item.Id" onclick="return confirm('Bạn có muốn hủy đơn hàng này?')" class="d-inline" method="post">
+                                        <div style="display:none">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <input type="hidden" id="Id" name="Id" asp-for="@item.Id" />
+                                            <div class="form-group">
+                                                <input id="Code" name="Code" asp-for="@item.Code" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="UserId" name="UserId" asp-for="@item.UserId" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="IssuedDate" name="IssuedDate" asp-for="@item.IssuedDate" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="ShippingAddress" name="ShippingAddress" asp-for="@item.ShippingAddress" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="ShippingPhone" name="ShippingPhone" asp-for="@item.ShippingPhone" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="Total" name="Total" asp-for="@item.Total" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="Email" name="Email" asp-for="@item.Email" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="Fullname" name="Fullname" asp-for="@item.Fullname" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="StatusId" name="StatusId" value="2" class="form-control" />
+                                            </div>
+                                        </div>
+                                            <button type="submit" title="Hủy Đơn Hàng" id="button-huydonhang">Hủy Đơn Hàng</button>
+                                    </form>
+                                </div>
+                                <div style=" width: 50%; font-size: 14px; line-height: 26px;">
+                                    <p>Ngày: <span style="font-weight:bold">@item.IssuedDate</span></p>
+                                    @foreach (var item2 in Model.Item2)
+                                    {
+                                        @if (item.Id == item2.InvoiceId)
+                                        {
+                                            <div style="display: flex; justify-content: space-around; align-items: center; font-size: 16px;">
+                                                <p>Tên SP: <span style="font-weight:bold">@item2.Product.Name</span></p><span>SL: <span style="font-weight:bold">@item2.Quantity</span></span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                <div style=" width: 30%; font-size: 12px;">
+                                    <p style=" color: #1a73e8;margin-bottom:1rem">(Sao chép mã đơn hàng để xem chi tiết hóa đơn này)</p>
+                                    <a asp-controller="Home" asp-action="SearchOrder" target="_blank" class="tracuuhoadon">Tra cứu hóa đơn <i class="fas fa-search"></i></a>
+                                </div>
+                            </div>
+                            <hr style="margin-top:20px" />
+                        </div>
+
+                    }
+                }
+                    else
+                {
+                    <h2 style="color: blue;">Không có hóa đơn chờ duyệt !!!</h2>
+                }
+            }
+            </div>
+        </div>
+
+        <div id="Đang giao" class="tabcontent">
+            <div style="margin-top:1rem;">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if(Model.Item1.Where(m => m.StatusId == 1).Count() > 0)
+                    { 
+                    @foreach (var item in Model.Item1.Where(m => m.StatusId == 1))
+                    {
+                        <!--Thông tin tra cứu-->
+                        <div class="myorder-content-danggiao">
+                            <div style="display: flex; justify-content: center; align-items: center;">
+                                <div class="border-badge" style=" width: 25%;">
+                                    <p style="display: contents;font-weight: 600;font-size: 15px;">
+                                        ĐƠN HÀNG<span style="font-size: 15px; font-weight: bold; background: none; color: #1a73e8;">
+                                            @item.Code
+                                        </span>
+                                    </p>
+                                </div>
+
+                                <div style=" width: 50%; font-size: 14px; line-height: 26px;">
+                                    <p>Ngày: <span style="font-weight:bold">@item.IssuedDate</span></p>
+                                    @foreach (var item2 in Model.Item2)
+                                    {
+                                        @if (item.Id == item2.InvoiceId)
+                                        {
+                                            <div style="display: flex; justify-content: space-around; align-items: center; font-size: 16px;">
+                                                <p>Tên SP: <span style="font-weight:bold">@item2.Product.Name</span></p><span>SL: <span style="font-weight:bold">@item2.Quantity</span></span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                <div style=" width: 30%; font-size: 12px;">
+                                    <p style=" color: #1a73e8;margin-bottom:1rem">(Sao chép mã đơn hàng để xem chi tiết hóa đơn này)</p>
+                                    <a asp-controller="Home" asp-action="SearchOrder" target="_blank" class="tracuuhoadon">Tra cứu hóa đơn <i class="fas fa-search"></i></a>
+                                </div>
+                            </div>
+                            <hr style="margin-top:20px" />
+                        </div>
+
+                    }
+                    }
+                    else
+                    {
+                        <h2 style="color: blue;">Không có hóa đơn đang giao !!!</h2>
+                    }
+                }
+            </div>
+        </div>
+
+        <div id="Đã giao" class="tabcontent">
+            <div style="margin-top:1rem;">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (Model.Item1.Where(m => m.StatusId == 4).Count() > 0)
+                    {
+                        @foreach (var item in Model.Item1.Where(m => m.StatusId == 4))
+                        {
+                            <!--Thông tin tra cứu-->
+                            <div class="myorder-content-dagiao">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <div class="border-badge" style=" width: 25%;">
+                                        <p style="display: contents;font-weight: 600;font-size: 15px;">
+                                            ĐƠN HÀNG<span style="font-size: 15px; font-weight: bold; background: none; color: #1a73e8;">
+                                                @item.Code
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <div style=" width: 50%; font-size: 14px; line-height: 26px;">
+                                        <p>Ngày: <span style="font-weight:bold">@item.IssuedDate</span></p>
+                                        @foreach (var item2 in Model.Item2)
+                                        {
+                                            @if (item.Id == item2.InvoiceId)
+                                            {
+                                                <div style="display: flex; justify-content: space-around; align-items: center; font-size: 16px;">
+                                                    <p>Tên SP: <span style="font-weight:bold">@item2.Product.Name</span></p><span>SL: <span style="font-weight:bold">@item2.Quantity</span></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+
+                                    <div style=" width: 30%; font-size: 12px;">
+                                        <p style=" color: #1a73e8;margin-bottom:1rem">(Sao chép mã đơn hàng để xem chi tiết hóa đơn này)</p>
+                                        <a asp-controller="Home" asp-action="SearchOrder" target="_blank" class="tracuuhoadon">Tra cứu hóa đơn <i class="fas fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <hr style="margin-top:20px" />
+                            </div>
+
+                        }
+                    }
+                    else
+                    {
+                        <h2 style="color: blue;">Không có hóa đơn đã giao !!!</h2>
+                    }
+                }
+            </div>
+        </div>
+
+        <div id="Đã hủy" class="tabcontent">
+            <div style="margin-top:1rem;">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (Model.Item1.Where(m => m.StatusId == 2).Count() > 0)
+                    {
+                        @foreach (var item in Model.Item1.Where(m => m.StatusId == 2))
+                        {
+                            <!--Thông tin tra cứu-->
+                            <div class="myorder-content-dahuy">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <div class="border-badge" style=" width: 25%;">
+                                        <p style="display: contents;font-weight: 600;font-size: 15px;">
+                                            ĐƠN HÀNG<span style="font-size: 15px; font-weight: bold; background: none; color: #1a73e8;">
+                                                @item.Code
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <div style=" width: 50%; font-size: 14px; line-height: 26px;">
+                                        <p>Ngày: <span style="font-weight:bold">@item.IssuedDate</span></p>
+                                        @foreach (var item2 in Model.Item2)
+                                        {
+                                            @if (item.Id == item2.InvoiceId)
+                                            {
+                                                <div style="display: flex; justify-content: space-around; align-items: center; font-size: 16px;">
+                                                    <p>Tên SP: <span style="font-weight:bold">@item2.Product.Name</span></p><span>SL: <span style="font-weight:bold">@item2.Quantity</span></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+
+                                    <div style=" width: 30%; font-size: 12px;">
+                                        <p style=" color: #1a73e8;margin-bottom:1rem">(Sao chép mã đơn hàng để xem chi tiết hóa đơn này)</p>
+                                        <a asp-controller="Home" asp-action="SearchOrder" target="_blank" class="tracuuhoadon">Tra cứu hóa đơn <i class="fas fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <hr style="margin-top:20px" />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <h2 style="color: blue;">Không có hóa đơn đã hủy !!!</h2>
+                    }
+                }
+            </div>
+        </div>
+
+        <div id="Tất cả" class="tabcontent">
+            <div style="margin-top:1rem;">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (Model.Item1.Where(m => m.StatusId != 3).Count() > 0)
+                    {
+                        @foreach (var item in Model.Item1.Where(m => m.StatusId != 3))
+                        {
+                            <!--Thông tin tra cứu-->
+                            <div class="myorder-content">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <div class="border-badge" style=" width: 25%;">
+                                        <p style="display: contents;font-weight: 600;font-size: 15px;">
+                                            ĐƠN HÀNG<span style="font-size: 15px; font-weight: bold; background: none; color: #1a73e8;">
+                                                @item.Code
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <div style=" width: 50%; font-size: 14px; line-height: 26px;">
+                                        <p>Ngày: <span style="font-weight:bold">@item.IssuedDate</span></p>
+                                        @foreach (var item2 in Model.Item2)
+                                        {
+                                            @if (item.Id == item2.InvoiceId)
+                                            {
+                                                <div style="display: flex; justify-content: space-around; align-items: center; font-size: 16px;">
+                                                    <p>Tên SP: <span style="font-weight:bold">@item2.Product.Name</span></p><span>SL: <span style="font-weight:bold">@item2.Quantity</span></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+
+                                    <div style=" width: 30%; font-size: 12px;">
+                                        <p style=" color: #1a73e8;margin-bottom:1rem">(Sao chép mã đơn hàng để xem chi tiết hóa đơn này)</p>
+                                        <a asp-controller="Home" asp-action="SearchOrder" target="_blank" class="tracuuhoadon">Tra cứu hóa đơn <i class="fas fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <hr style="margin-top:20px" />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <h2 style="color: blue;">Không có hóa đơn nào !!!</h2>
+                    }
+                }
+                @if (Model.Item1.Count() > 4)
+                {
+                    <a href="#" id="loadMoreMyOrder">Xem thêm các đơn hàng đã đặt <i class="fas fa-caret-down"></i></a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Load More -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".myorder-content").slice(0, 4).show();
+        $("#loadMoreMyOrder").on("click", function (e) {
+            e.preventDefault();
+            $(".myorder-content:hidden").slice(0, 4).slideDown();
+            if ($(".myorder-content:hidden").length == 0) {
+                $("#loadMoreMyOrder").text("Đã hiển thị tất cả").addClass("noContentMyOrder");
+            }
+        });
+
+    })
+</script>
+<!--End Load More -->
+<!--Tabs -->
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
+<!--End Tabs -->

@@ -1,0 +1,165 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Invoices>, IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>>
+
+@{
+    ViewData["Title"] = "ViewAll";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Danh sách đơn mới</h3>
+<div class="card mt-2">
+    <div class="card-content"">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","Invoices",null,Context.Request.Scheme)','Tạo hoá đơn')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Tạo hoá đơn</h5></a>
+            <form asp-controller="Invoices" asp-action="Pending" method="get" style="display:inline;">
+                <div style="display:flex">
+                    <div style="margin-top:1rem">
+                        <span style="font-weight:bold">Thông tin:</span><input type="text" name="SearchString" placeholder="Nhập Code, SĐT, ĐC..." class="input-css" style="border: 1px solid #dce7f1;border-radius: .25rem;padding: 6px;" />
+                    </div>
+                    <div style="margin-top:1rem;margin-left:1rem">
+                        <span style="font-weight:bold">Từ ngày:</span><input type="date" id="birthdaytime" name="fromDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                        <span style="font-weight:bold">đến ngày:</span><input type="date" id="birthdaytime" name="toDate" style="
+                                    border: 1px solid;
+                                    border-radius: 7px;
+                                    padding: 8px;
+                                ">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger" style="margin-top:1rem">Tìm kiếm <i class="fas fa-search"></i></button>
+            </form>
+            <div class="scrollmenu" style="overflow: scroll; white-space: nowrap; height: 700px;">
+                <div class="table-responsive" style="overflow-x:unset !important; margin-bottom:2rem">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+
+                                </th>
+                                <th>
+
+                                </th>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    Code
+                                </th>
+                                @*<th>
+                                    ID Người Dùng
+                                </th>*@
+                                <th>
+                                    Ngày Tạo
+                                </th>
+                                <th>
+                                    Địa Chỉ
+                                </th>
+                                <th>
+                                    SĐT
+                                </th>
+                                <th>
+                                    Tổng Tiền
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Họ và Tên
+                                </th>
+                                <th>
+                                    Trạng Thái
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Item1.Count() != 0)
+                            {
+                                @foreach (var item in Model.Item1)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                                    <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                                </form>
+                                                <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("EditPending", "Invoices", new { id = item.Id })','Edit')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @foreach (var item2 in Model.Item2)
+                                            {
+                                                @if (item.Id == item2.InvoiceId)
+                                                {
+                                                    <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Details", "InvoiceDetails", new { id = item2.Id })','Details')"><i title="Chi tiết hoá đơn" class="fas fa-file-invoice" style="font-size: 23px; color: #34e1cf"></i></button>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Code)
+                                        </td>
+                                        @*<td>
+                                            @Html.DisplayFor(modelItem => item.UserId)
+                                        </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IssuedDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ShippingAddress)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ShippingPhone)
+                                        </td>
+                                        <td>
+                                            @item.Total.ToString("#,##VNĐ")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Fullname)
+                                        </td>
+                                        <td>
+                                            @if (item.StatusId == 0)
+                                            {
+                                                <span class="badge bg-info text-white">Chờ duyệt</span>}
+                                            @if (item.StatusId == 1)
+                                            {
+                                                <span class="badge bg-primary text-white">Đang giao hàng</span>}
+                                            @if (item.StatusId == 2)
+                                            {
+                                                <span class="badge bg-danger text-white">Hủy đơn</span>}
+                                            @if (item.StatusId == 3)
+                                            {
+                                                <span class="badge bg-danger text-white">Giao dịch không hoàn thành</span>}
+                                            @if (item.StatusId == 4)
+                                            {
+                                                <span class="badge bg-success text-white">Đã giao</span>}
+                                        </td>
+
+
+                                    </tr>
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" style="color:crimson">Không có hoá đơn mới ! <i class="far fa-frown"></i>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

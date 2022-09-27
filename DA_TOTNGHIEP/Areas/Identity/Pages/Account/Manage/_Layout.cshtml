@@ -1,0 +1,109 @@
+﻿@{
+    @*if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
+        {
+            Layout = (string)parentLayout;
+        }
+        else
+        {
+            Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+        }*@
+
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<style>
+    .collapsible-invoice {
+        background-color: #D70018;
+        color: white;
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 3px;
+        text-align: center;
+        outline: none;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+        .active-invoice, .collapsible-invoice:hover {
+            background-color: #e30d25;
+        }
+
+    .collapsible-invoice:after {
+        content: '\002B';
+        color: white;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+    .active-invoice:after {
+        content: "\2212";
+    }
+
+    .content-invoice {
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        background-color: #f1f1f1;
+    }
+</style>
+
+<div class="container section-detail">
+    <ul class="breadcumb">
+        <li>
+            <a asp-area="" asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+            <meta property="position" content="1">
+        </li>
+        <li>
+            <span>›</span>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index">Hồ sơ</a>
+            <meta property="position" content="2">
+        </li>
+    </ul>
+</div>
+
+<div class="login-page" style="padding:0%;">
+    <div class="form" style="max-width:50%">
+        <h1 style="margin-bottom:1rem">QUẢN LÝ TÀI KHOẢN </h1>
+        <hr />
+        <div style="margin-top:1rem;">
+            <div class="row">
+                <div class="col-md-4" style="line-height: 32px;font-size: 16px;">
+                    <partial name="_ManageNav" />
+                </div>
+                <div class="col-md-7">
+                    @RenderBody()
+                </div>
+            </div>
+            @*<div style="margin-top:1rem">
+                <button type="button" class="collapsible-invoice">Đơn hàng đã đặt</button>
+                <div class="content-invoice">
+                    @Html.Partial("_MyOrder")
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible-invoice");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active-invoice");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+</script>
+@*@section Scripts {
+        @RenderSection("Scripts", required: false)
+    }
+*@

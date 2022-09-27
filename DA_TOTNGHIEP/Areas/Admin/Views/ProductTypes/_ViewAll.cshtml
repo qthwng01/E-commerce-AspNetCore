@@ -1,0 +1,78 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.ProductTypes>
+
+@{
+    ViewData["Title"] = "ViewAll";
+}
+<canvas id="barChart" width="400" height="100"></canvas>
+
+<script>
+    var c = document.getElementById("barChart");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/ProductTypes/BarChartDataEF");
+    var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: tData
+    });
+</script>
+
+<h3>Danh sách loại sản phẩm</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","ProductTypes",null,Context.Request.Scheme)','Tạo loại sản phẩm')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Tạo loại sản phẩm</h5></a>
+            <div class="scrollmenu" style="overflow: auto; white-space: nowrap;">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="color:#000">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                @*<th>
+                                    @Html.DisplayNameFor(model => model.Color)
+                                </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() != 0)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        @*<td>@item.Color</td>*@
+                                        <td>@item.CreatedAt</td>
+                                        @if (item.Status == true)
+                                        {
+                                            <td><span class="badge bg-success">Active</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge bg-danger">UnActive</span></td>
+                                        }
+                                        <td>
+                                            <div>
+                                                <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Edit","ProductTypes",new {id=item.Id})','Update')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                                <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                                    <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

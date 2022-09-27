@@ -1,0 +1,287 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assetsUser/img/logomain (3).png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assetsUser/img/logomain (2).png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assetsUser/img/logomain (1).png">
+    <link rel="manifest" href="~/assetsUser/img/logomain (1).ico">
+
+    <link rel="stylesheet" href="~/assetsUser/assets/css/layoutss.css">
+    <link rel="stylesheet" href="~/assetsUser/assets/css/adss.css">
+    <link rel="stylesheet" href="~/assetsUser/assets/css/product.css">
+    <link href="~/assetsUser/assets/css/login.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assetsUser/assets/css/style.css">
+    <link rel="stylesheet" href="~/assetsUser/assets/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="~/assetsUser/assets/css/mainss.css">
+    <link href="~/assetsUser/assets/css/cart.css" rel="stylesheet" />
+    <link href="~/assetsUser/assets/css/payment.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assetsUser/assets/css/order.css" />
+    <title>C&T Phone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+</head>
+
+<body>
+    <!-- Start Menu Header -->
+    <section class="header">
+        <header class="menu-header">
+            <div class="menu-header-top">
+                <nav class="menu-nav-top">
+                    <div class="menu-container-nav">
+                        <div class="menu-container">
+                            <div class="logo-shop">
+                                <a asp-area="" asp-controller="Home" asp-action="Index" title="C&T Phone">
+                                    <img src="~/assetsUser/img/logo.png" alt="">
+                                </a>
+                            </div>
+                            <form class="form-search" asp-area="" asp-controller="Home" asp-action="Products" method="get">
+                                <div class="box-search">
+                                    <input type="text" name="search" placeholder="Bạn cần tìm gì ?" required>
+                                    <button type="submit"><i class="fas fa-search" style="margin:-12px 0px 0px -17px;"></i></button>
+                                </div>
+                            </form>
+                            <div class="box-about">
+                                <a class="phone" href="tel:039632738">
+                                    <div class="icon-phone">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="content-phone">
+                                        <p>Gọi mua hàng</p>
+                                        <strong>1800.1008</strong>
+                                    </div>
+                                </a>
+                                <a class="shipping" asp-area="" asp-controller="Home" asp-action="SearchOrder">
+                                    <div class="icon-shipping">
+                                        <i class='fas fa-shipping-fast'></i>
+                                    </div>
+                                    <div class="content-shipping">
+                                        <p>
+                                            Tra cứu<br>
+                                            đơn hàng
+                                        </p>
+                                    </div>
+                                </a>
+                                <a class="cart" asp-area="" asp-action="Index" asp-controller="Carts">
+                                    <div class="icon-cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <div class="content-cart">
+                                            @if (ViewBag.CountCart > 0)
+                                            {
+                                                <p>
+                                                    (@ViewBag.CountCart)
+                                                </p>
+                                            }
+                                            else if (ViewBag.CountCart <= 0)
+                                            {
+                                                <p>
+                                                    (0)
+                                                </p>
+                                            }
+                                        </div>
+                                    }
+                                </a>
+                                <a class="user">
+                                    <div class="icon-user">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div class="content-user">
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            <p style="margin-top:9px">
+                                                <a style="color: #fff; font-size: 15px;
+                                                   margin: 0 0 0 -58px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hồ sơ</a><br />
+                                            </p>
+                                            <div>
+                                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                    @* <button type="submit" class="nav-link btn btn-link text-dark">Đăng xuất</button>*@
+                                                </form>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-top:9px">
+                                                <a style="color: #fff; font-size: 15px;
+                                                        margin: 0 0 0 -58px;" asp-area="Identity" asp-page="/Account/Login">Đăng nhập / Đăng ký</a>
+                                            </p>
+                                        }
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="menu-header-main">
+                <nav class="menu-nav-main" style="padding: 4px;">
+                    <div class="menu-main-container">
+                            <a asp-controller="Home" asp-action="Apple" class="menu-phone" style="margin-right: 20px;">
+                                <div class="nav-phone" style="border: 1px solid #fff; border-radius: 1rem; background: #fff; padding: 4px 20px;">
+                                        <img src="https://cellphones.com.vn/media/icons/brands/brand-286.svg" alt="" style=" width: 70px; height: 20px; display: flex;" />
+                                </div>
+                            </a>
+                            <a asp-controller="Home" asp-action="SamSung" class="menu-accessory" style="margin-right: 20px;">
+                                <div class="nav-accessory" style="border: 1px solid #fff; border-radius: 1rem; background: #fff; padding: 4px 20px;">
+                                        <img src="https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png" alt="" style=" width: 70px; height: 20px; display: flex;" />
+                                </div>
+                            </a>
+                            <a asp-controller="Home" asp-action="Xiaomi" class="menu-secondhand" style="margin-right: 20px;">
+                                <div class="nav-secondhand" style="border: 1px solid #fff; border-radius: 1rem; background: #fff; padding: 4px 20px;">
+                                    <img src="https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png" alt="" style=" width: 70px; height: 20px; display: flex;" />
+                                </div>
+                            </a>
+                            <a asp-controller="Home" asp-action="Oppo" class="menu-sale" style="margin-right: 20px;">
+                                <div class="nav-sale" style="border: 1px solid #fff; border-radius: 1rem; background: #fff; padding: 4px 20px;">
+                                    <img src="https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg" alt="" style=" width: 70px; height: 20px; display: flex;" />
+                                </div>
+                            </a>
+                            <a asp-controller="Home" asp-action="Nokia" class="menu-installment" style="margin-right: 20px;">
+                                <div class="nav-installment" style="border: 1px solid #fff; border-radius: 1rem; background: #fff; padding: 4px 20px;">
+                                    <img src="https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg" alt="" style=" width: 70px; height: 20px; display: flex;" />
+                                </div>
+                            </a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+    </section>
+    <!-- End Menu Header -->
+
+
+    @RenderBody()
+
+    <footer>
+        <div class="container footer-ct">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="ul-style">
+                        <li>
+                            <a href="">Lịch sử mua hàng</a>
+                        </li>
+                        <li>
+                            <a href="">Cộng tác bán hàng</a>
+                        </li>
+                        <li>
+                            <a href="">Tìm hiểu về trả góp</a>
+                        </li>
+                        <li>
+                            <a href="">Chính sách bảo hành</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <ul class="ul-style">
+                        <li>
+                            <a href="">Giới thiệu cửa hàng</a>
+                        </li>
+                        <li>
+                            <a href="">Tuyển dụng</a>
+                        </li>
+                        <li>
+                            <a href="">Gửi góp ý, khiếu nại</a>
+                        </li>
+                        <li>
+                            <a href="">Đổi trả</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <ul class="ul-style">
+                        <li>
+                            <a href="">Tổng đài hỗ trợ (Miễn phí gọi)</a>
+                        </li>
+                        <li>
+                            <a href="tel:18001234" style="color: blue;">Gọi mua: 18001234 (7:30 - 22:00)</a>
+                        </li>
+                        <li>
+                            <a href="" style="color: blue;">Kỹ thuật: 18001234 (7:30 - 22:00)</a>
+                        </li>
+                        <li>
+                            <a href="" style="color: blue;">Bảo hành: 18001234 (7:30 - 22:00)</a>
+                        </li>
+                        <li>
+                            <a href="" style="color: blue;">Đổi trả: 18001234 (7:30 - 22:00)</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <ul class="ul-style" style="display: inline-flex;">
+                        <li>
+                            <a href="">
+                                <img src="~/assetsUser/img/img-bocongthuong.jpg" width="80" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img style="margin-top: 10px;" src="~/assetsUser/img/img-bocongthuong2.jpg" width="80" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img style="margin-top: 10px;" src="~/assetsUser/img/img-aninhmang.png" width="80" alt="">
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="col">
+                        <p style="font-size:14px;font-weight: 500;">Website đối tác</p>
+                        <ul class="ul-style-2" style="display: inline-flex;">
+                            <li>
+                                <a href="">
+                                    <img src="~/assetsUser/img/img-dienmayxanh.jpg" width="100" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <img src="~/assetsUser/img/img-dienmayxanh.jpg" width="100" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <img src="~/assetsUser/img/img-dienmayxanh.jpg" width="100" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <img src="~/assetsUser/img/img-dienmayxanh.jpg" width="100" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="footer-bot">
+        <p>Dev by C & T</p>
+    </div>
+    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="~/assetsUser/assets/js/main.js"></script>
+    <script src="~/assetsAdmin/js/site.js"></script>
+    <script src="~/assetsUser/assets/js/payment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    
+    @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    @await Component.InvokeAsync("Notyf")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

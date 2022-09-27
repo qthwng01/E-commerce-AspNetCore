@@ -1,0 +1,191 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Invoices>, IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>>
+
+@{
+    ViewData["Title"] = "Thống kê người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3>Thống kê người dùng</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            @*<form asp-controller="ProductStatistics" asp-action="Index" method="get" style="display:inline;margin-left:12rem;">
+                <div>
+                    <fieldset class="form-group d-inline-flex pr-2">
+                        <div>
+                            <span style=" font-weight: 700;">Thông tin:</span>
+                            <div>
+                                <input type="text" name="SearchString" placeholder="Nhập SKU, Tên SP..." class="input-css" style="border: 1px solid #dce7f1;border-radius: .25rem;padding: 6px;" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <button type="submit" class="btn btn-danger">Tìm kiếm <i class="fas fa-search"></i></button>
+            </form>*@
+            <div style="display:flex">
+                <div style="margin-top: 1rem;margin-bottom:1rem;margin-left:1rem">
+                    <h4 style=" font-weight: 700;">Sắp xếp người dùng đã mua nhiều nhất:</h4>
+                    <h6 style="color: #d70018;">(Khách hàng VIP là khách hàng có tổng số tiền đã mua trên 200.000.000 ₫)</h6>
+                    <div>
+                        @if (@ViewData["UserAscending"] != "")
+                        {
+                            <button class="sort-product-ascending" style=" background: #f0f0f0;">
+                                <a asp-controller="UserStatistics" asp-action="Index" asp-route-sortUserAscending="@ViewData["UserAscending"]" style="color: #000;">Thấp - Cao <i class="fas fa-sort-amount-up"></i></a>
+                            </button>
+                        }
+                        else if (@ViewData["UserAscending"] == "")
+                        {
+                            <button class="sort-product-ascending" style=" background: #f0f0f0;">
+                                <a asp-controller="UserStatistics" asp-action="Index" asp-route-sortUserAscending="@ViewData["UserAscending"]" style="color:blue">Thấp - Cao <i class="fas fa-sort-amount-up"></i></a>
+                            </button>
+                        }
+                        @if (@ViewData["UserDescending"] != "")
+                        {
+                            <button class="sort-product-ascending" style=" background: #f0f0f0;">
+                                <a asp-controller="UserStatistics" asp-action="Index" asp-route-sortUserDescending="@ViewData["UserDescending"]" style="color: #000;">Cao - Thấp <i class="fas fa-sort-amount-down"></i></a>
+                            </button>
+                        }
+                        else if (@ViewData["UserDescending"] == "")
+                        {
+                            <button class="sort-product-ascending" style=" background: #f0f0f0;">
+                                <a asp-controller="UserStatistics" asp-action="Index" asp-route-sortUserDescending="@ViewData["UserDescending"]" style="color:blue">Cao - Thấp <i class="fas fa-sort-amount-down"></i></a>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="scrollmenu" style="overflow: scroll; white-space: nowrap; height: 500px;">
+                <div class="table-responsive" style="overflow-x:unset !important; margin-bottom:2rem">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th style="width: 30%;">
+                                    Email người dùng
+                                </th>
+                                <th>
+                                    Tổng số tiền đã mua
+                                </th>
+                                <th>
+                                    Tổng SL sản phẩm đã mua
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (@ViewData["UserAscending"] != "" && @ViewData["UserDescending"] != "")
+                            {
+                                int stt = 1;
+                                @foreach (var itemproduct in Model.Item2.GroupBy(i => i.Invoice.UserId).Select(p => new
+                                {
+                                    Id = p.Key,
+                                    Email = p.Select(o => o.Invoice.User.Email).FirstOrDefault(),
+                                    Quantity = p.Where(o => o.Invoice.StatusId == 4 && o.MomoConfirm != "Giao dịch Momo bị huỷ").Sum(o => o.Quantity),
+                                    Money = p.Where(o => o.Invoice.StatusId == 4 && o.MomoConfirm != "Giao dịch Momo bị huỷ").Sum(o => o.UnitPrice * o.Quantity),
+                                }).OrderBy(i => i.Id).ToList())
+                                {
+                                    <tr>
+                                        <td>
+                                            @(stt++)
+                                        </td>
+                                        @if(itemproduct.Money >= 200000000) 
+                                        { 
+                                            <td>
+                                                @itemproduct.Email <img src="~/assetsUser/img/vip.png" style="height: 28px; width: 28px;" />
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @itemproduct.Email
+                                            </td>
+                                        }
+                                        <td>
+                                            @itemproduct.Money.ToString("##,#0 ₫")
+                                        </td>
+                                        <td>
+                                            @itemproduct.Quantity
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else if (@ViewData["UserAscending"] == "")
+                            {
+                                int stt = 1;
+                                @foreach (var itemproduct in Model.Item2.GroupBy(i => i.Invoice.UserId).Select(p => new
+                                {
+                                    Id = p.Key,
+                                    Email = p.Select(o => o.Invoice.User.Email).FirstOrDefault(),
+                                    Quantity = p.Where(o => o.Invoice.StatusId == 4 && o.MomoConfirm != "Giao dịch Momo bị huỷ").Sum(o => o.Quantity),
+                                    Money = p.Where(o => o.Invoice.StatusId == 4 && o.MomoConfirm != "Giao dịch Momo bị huỷ").Sum(o => o.UnitPrice * o.Quantity),
+                                }).OrderBy(i => i.Money).ToList())
+                                {
+                                    <tr>
+                                        <td>
+                                            @(stt++)
+                                        </td>
+                                        @if(itemproduct.Money >= 200000000) 
+                                        { 
+                                            <td>
+                                                @itemproduct.Email <img src="~/assetsUser/img/vip.png" style="height: 28px; width: 28px;"/>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @itemproduct.Email
+                                            </td>
+                                        }
+                                        <td style="font-weight:bold;color:#000">
+                                            @itemproduct.Money.ToString("##,#0 ₫")
+                                        </td>
+                                        <td>
+                                            @itemproduct.Quantity
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else if (@ViewData["UserDescending"] == "")
+                            {
+                                int stt = 1;
+                                @foreach (var itemproduct in Model.Item2.GroupBy(i => i.Invoice.UserId).Select(p => new
+                                {
+                                    Id = p.Key,
+                                    Email = p.Select(o => o.Invoice.User.Email).FirstOrDefault(),
+                                    Quantity = p.Where(o => o.Invoice.StatusId == 4 && o.MomoConfirm != "Giao dịch Momo bị huỷ").Sum(o => o.Quantity),
+                                    Money = p.Where(o => o.Invoice.StatusId == 4 && o.MomoConfirm != "Giao dịch Momo bị huỷ").Sum(o => o.UnitPrice * o.Quantity),
+                                }).OrderByDescending(i => i.Money).ToList())
+                                {
+                                    <tr>
+                                        <td>
+                                            @(stt++)
+                                        </td>
+                                        @if(itemproduct.Money >= 200000000) 
+                                        { 
+                                            <td>
+                                                @itemproduct.Email <img src="~/assetsUser/img/vip.png" style="height: 28px; width: 28px;" />
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @itemproduct.Email
+                                            </td>
+                                        }
+                                        <td style="font-weight:bold;color:#000">
+                                            @itemproduct.Money.ToString("##,#0 ₫")
+                                        </td>
+                                        <td>
+                                            @itemproduct.Quantity
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,145 @@
+﻿@model DA_TOTNGHIEP.Models.Invoices
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<section class="row">
+    <div class="col-8">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Thống kê doanh thu</h3>
+                        <form asp-controller="Dashboard" asp-action="Index" method="get">
+                            <h4>Lựa chọn doanh thu theo ngày, tháng:</h4>
+                            Từ ngày: <input type="date" id="birthdaytime" name="fromDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                            đến ngày: <input type="date" id="birthdaytime" name="toDate" style="
+                                    border: 1px solid;
+                                    border-radius: 7px;
+                                    padding: 8px;
+                                ">
+                            <input type="submit" value="Lọc" style="
+                                                                    border: 1px solid #2665f2;
+                                                                    border-radius: 7px;
+                                                                    padding: 10px;
+                                                                    background: #1984ff;
+                                                                    color: #fff;
+                                                                ">
+                        </form>
+                    </div>
+                    @if (ViewBag.fromDate == "01/01/0001" && ViewBag.fromDate == "01/01/0001")
+                    {
+                        <div class="card-body">
+                            <h4>(7 ngày gần đây)</h4>
+                            <div id="chart-profile-visit"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-body">
+                            <h4>(@ViewBag.fromDate - @ViewBag.toDate)</h4>
+                            <div id="chart-profile-visit"></div>
+                        </div>
+                    }
+                        @*<div class="card-body">
+                            <div id="line"></div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Thống kê hoá đơn</h4>
+                        <a asp-controller="Invoices" asp-action="Index" asp-area="Admin"> Xem trang hoá đơn</a>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-visitors-profile">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@if(ViewBag.fromDate == "01/01/0001" && ViewBag.fromDate == "01/01/0001") { 
+<script>
+    var optionsProfileVisit = {
+        annotations: {
+            position: 'back'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        chart: {
+            type: 'bar',
+            height: 300
+        },
+        fill: {
+            opacity: 1
+        },
+        plotOptions: {
+        },
+        series: [{
+            name: 'Doanh thu',
+            data: [@ViewBag.countTotal6,@ViewBag.countTotal5,@ViewBag.countTotal4,@ViewBag.countTotal3,@ViewBag.countTotal2,@ViewBag.countTotal1,@ViewBag.countTotalToday]
+        }],
+        colors: '#435ebe',
+        xaxis: {
+            categories: ["@ViewBag.dateTime6", "@ViewBag.dateTime5", "@ViewBag.dateTime4", "@ViewBag.dateTime3", "@ViewBag.dateTime2", "@ViewBag.dateTime1", "@ViewBag.dateTimeToday"],
+        },
+    }
+</script>
+}
+else { 
+        <script>
+    var optionsProfileVisit = {
+        annotations: {
+            position: 'back'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        chart: {
+            type: 'bar',
+            height: 300
+        },
+        fill: {
+            opacity: 1
+        },
+        plotOptions: {
+        },
+        series: [{
+            name: 'Doanh thu',
+            data: [@ViewBag.total]
+        }],
+        colors: '#435ebe',
+        xaxis: {
+            categories: ["@ViewBag.fromDate" + "-" + "@ViewBag.toDate"],
+        },
+    }
+</script>
+}
+@*<script>
+    var lineOptions = {
+        chart: {
+            type: "line",
+        },
+        series: [
+            {
+                name: "sales",
+                data: [@ViewBag.countTotal6,@ViewBag.countTotal5,@ViewBag.countTotal4,@ViewBag.countTotal3,@ViewBag.countTotal2,@ViewBag.countTotal1,@ViewBag.countTotalToday],
+            },
+        ],
+        xaxis: {
+            categories: ["@ViewBag.dateTime6", "@ViewBag.dateTime5", "@ViewBag.dateTime4", "@ViewBag.dateTime3", "@ViewBag.dateTime2", "@ViewBag.dateTime1", "@ViewBag.dateTimeToday"],
+        },
+    };
+</script>*@

@@ -1,0 +1,515 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Products>,IEnumerable<DA_TOTNGHIEP.Models.Comment>, IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+<style>
+    .list-product {
+        position: relative
+    }
+
+        .list-product .swiper {
+            margin-top: 5px;
+        }
+
+            .list-product .swiper .swiper-wrapper .swiper-slide {
+                height: 440px;
+            }
+
+    .swiper-slide {
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+        .swiper-slide .items-product .content-product {
+            line-height: 25px;
+            padding: 10px;
+        }
+
+        .swiper-slide .items-product .name-product {
+            text-align: left;
+            font-weight: bold;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .swiper-slide .items-product .price-product {
+            display: flex;
+        }
+
+            .swiper-slide .items-product .price-product .special-price {
+                font-weight: bold;
+                font-size: 15px;
+                color: #d70018;
+            }
+
+            .swiper-slide .items-product .price-product .old-price {
+                padding-left: 15px;
+                font-size: 12px;
+                text-decoration: line-through;
+            }
+
+        .swiper-slide .items-product .evaluate {
+            /* margin-bottom: 20px; */
+            display: flex;
+            font-size: 13px;
+        }
+
+            .swiper-slide .items-product .evaluate .evaluate-star .fa-star.checked {
+                color: #F59E0B;
+            }
+            .swiper-slide .items-product .evaluate .evaluate-star .fa-star.unchecked {
+                color: #808080;
+            }
+                .swiper-slide .items-product .evaluate .evaluate-quantity {
+                    padding-left: 10px;
+                }
+</style>
+<div class="main-home">
+    <!-- Start Ads -->
+    <div class="container ads">
+        <div class="row ads-row">
+            <div class="col-md-8 ads-large">
+                <div class="slides">
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <a href="">
+                                    <img src="https://images.fpt.shop/unsafe/fit-in/800x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2022/5/4/637872228198270887_F-H1_800x300.png" alt="">
+                                </a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="">
+                                    <img src="https://images.fpt.shop/unsafe/fit-in/800x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2022/4/30/637869584227387740_F_H1_800x300.png" alt="">
+                                </a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="">
+                                    <img src="https://images.fpt.shop/unsafe/fit-in/800x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2022/5/3/637872181380550120_F-H1_800x300.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 ads-small">
+                <div class="container ads-small-top">
+                    <a href="">
+                        <img src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/A73_2.png" style="object-fit: fill;" alt="">
+                    </a>
+                </div>
+                <div class="container ads-small-bottom">
+                    <a href="">
+                        <img src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/Asus_Zenbook.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Ads -->
+
+<div class="box-quickfilter container-fluid" style="width:80%">
+    <div class="lst-quickfilter" style=" justify-content: center; align-content: center;">
+        <a asp-controller="Home" asp-action="Apple" class="lst-box-items bd-radius">
+            <img src="https://cellphones.com.vn/media/icons/brands/brand-286.svg" width="100" style="height: 20px;" class="no-text">
+        </a>
+        <a asp-controller="Home" asp-action="SamSung" class="lst-box-items bd-radius">
+            <img src="https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png" width="100" class="no-text">
+        </a>
+        <a asp-controller="Home" asp-action="Xiaomi" class="lst-box-items bd-radius">
+            <img src="https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png" width="100" class="no-text">
+        </a>
+        <a asp-controller="Home" asp-action="Oppo" class="lst-box-items bd-radius">
+            <img src="https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg" width="100" class="no-text">
+        </a>
+        <a asp-controller="Home" asp-action="Nokia" class="lst-box-items bd-radius">
+            <img src="https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg" width="100" class="no-text">
+        </a>
+    </div>
+</div>
+
+@*<div class="container" style="width:80%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="trending">
+                <h4>XU HƯỚNG MUA SẮM</h4>
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn.tgdd.vn/2022/04/banner/Frame49172-280x235.png" alt="#">
+                            <span>Điện thoại</span>
+                            <strong>Galaxy A Series 2022</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn.tgdd.vn/2022/04/banner/phukien-280x235.png" alt="#">
+                            <span>Tai nghe không dây</span>
+                            <strong>Giảm đến 50%</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn.tgdd.vn/2022/04/banner/phukien-280x235.png" alt="#">
+                            <span>Tai nghe không dây</span>
+                            <strong>Giảm đến 50%</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn.tgdd.vn/2022/04/banner/dongho-280x235-1.png" alt="#">
+                            <span>Smartwatch</span>
+                            <strong>Giảm đến 50%</strong>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="product">
+    <div class="product-outstanding">
+        <div class="title-product">
+            <p class="main-title">SẢN PHẨM NỔI BẬT</p>
+            <a asp-controller="Home" asp-action="AllProduct"><p class="extra-title">Xem tất cả <i class="fas fa-angle-right"></i></p></a>
+        </div>
+        <div class="list-product">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    @foreach (var items in Model.Item2.GroupBy(c => c.ProductId).Select(s => new
+                    {
+                        ProductIdTrending = s.Key,
+                        QuantityRating = s.Average(o => o.Rating),
+                    }).Where(o => o.QuantityRating >= 4).OrderByDescending(o => o.QuantityRating).ToList())
+                    {
+                        @foreach (var item in Model.Item1)
+                        {
+                            int ratingCount = 0;
+                            int? ratingAverage = 0;
+                            int? ratingSum = 0;
+                            @if (items.ProductIdTrending == item.Id)
+                            {
+                                @if (item.Status == true)
+                                {
+
+                                    <div class="swiper-slide">
+                                        <div class="items-product">
+                                            @if (item.ImageProductId == null)
+                                            {
+                                                <div class="image-product">
+                                                    <a href="">
+                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" alt="" />
+                                                        <h3>No data</h3>
+                                                    </a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="image-product">
+                                                    <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                                        <img src="~/assetsAdmin/imgProducts/@item.ImageProductss.ImageName" style="width:290.59px;height:290.59px" alt="">
+                                                    </a>
+                                                </div>
+
+                                            }
+                                            <div class="content-product">
+                                                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                                    <div class="name-product">@item.Name</div>
+                                                </a>
+                                                <div class="price-product">
+                                                    <p class="special-price">@item.Price.ToString("#,##0") ₫</p>
+                                                    <p class="old-price">@item.ListedPrice.ToString("#,##0") ₫</p>
+                                                </div>
+                                                @foreach (var item2 in Model.Item2)
+                                                {
+                                                    @if (item.Id == item2.ProductId)
+                                                    {<span style="display:none">@(ratingSum += item2.Rating)</span>
+                                                        <span style="display:none">@((ratingCount += 1))</span>
+                                                        <span style="display:none">@((ratingAverage = ratingSum / ratingCount))</span>
+                                                    }
+                                                }
+                                                <div class="evaluate">
+                                                    <div class="evaluate-star">
+                                                        @if (ratingAverage == 0)
+                                                        {
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                        }
+                                                        @if (ratingAverage == 1)
+                                                        {
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                        }
+                                                        @if (ratingAverage == 2)
+                                                        {
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                        }
+                                                        @if (ratingAverage == 3)
+                                                        {
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                        }
+                                                        @if (ratingAverage == 4)
+                                                        {
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star unchecked"></i>
+                                                        }
+                                                        @if (ratingAverage == 5)
+                                                        {
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                            <i class="fas fa-star checked"></i>
+                                                        }
+                                                    </div>
+                                                    <div class="evaluate-quantity">
+                                                        <span>@ratingCount đánh giá</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                }
+                            }
+                        }
+                    }
+
+                        </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+    <div class="product-selling">
+        <div class="title-product">
+            <p class="main-title">SẢN PHẨM BÁN CHẠY</p>
+            <a asp-controller="Home" asp-action="AllProduct"><p class="extra-title">Xem tất cả <i class="fas fa-angle-right"></i></p></a>
+        </div>
+        <div class="list-product">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    @foreach (var itemproduct in Model.Item3.GroupBy(i => i.ProductId).Select(p => new
+                    {
+                        Id = p.Key,
+                        Quantity = p.Where(o => o.Invoice.StatusId == 4).Sum(o => o.Quantity),
+                    }).OrderByDescending(i => i.Quantity).ToList())
+                        @foreach (var item in Model.Item1)
+                        {
+                            int ratingCount = 0;
+                            int? ratingAverage = 0;
+                            int? sumRating = 0;
+                            @if (itemproduct.Id == item.Id && itemproduct.Quantity >= 2)
+                            {
+                                @foreach (var item2 in Model.Item2)
+                                {
+                                    @if (item.Id == item2.ProductId)
+                                    {<span style="display:none">@(sumRating += item2.Rating)</span>
+                                        <span style="display:none">@((ratingCount += 1))</span>
+                                        <span style="display:none">@((ratingAverage = sumRating / ratingCount))</span>
+                                    }
+                                }
+                                <div class="swiper-slide">
+                                    <div class="items-product">
+                                        @if (item.ImageProductId == null)
+                                        {
+                                            <div class="image-product">
+                                                <a href="">
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" alt="" />
+                                                    <h3>No data</h3>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="image-product">
+                                                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                                    <img src="~/assetsAdmin/imgProducts/@item.ImageProductss.ImageName" style="width:290.59px;height:290.59px" alt="">
+                                                </a>
+                                            </div>
+
+                                        }
+                                        <div class="content-product">
+                                            <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                                <div class="name-product">@item.Name</div>
+                                            </a>
+                                            <div class="price-product">
+                                                <p class="special-price">@item.Price.ToString("#,##0") ₫</p>
+                                                <p class="old-price">34.900.000 ₫</p>
+                                            </div>
+                                            <div class="evaluate">
+                                                <div class="evaluate-star">
+                                                    @if (ratingAverage == 0)
+                                                    {
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 1)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 2)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 3)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 4)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 5)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                    }
+                                                </div>
+                                                <div class="evaluate-quantity">
+                                                    <span>@ratingCount đánh giá</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            }
+                        </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="brand-page">
+    <div class="title-brand-page">
+        <p class="main-title">CHUYÊN TRANG THƯƠNG HIỆU</p>
+    </div>
+    <div class="content-brand-page">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-apple-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-samsung-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-asus-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-xiaomi-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper', {
+        slidesPerView: 4,
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        direction: getDirection(),
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        on: {
+                        resize: function () {
+                                swiper.changeDirection(getDirection());
+                            },
+        },
+    });
+
+                        function getDirection() {
+                            var windowWidth = window.innerWidth;
+                            var direction = window.innerWidth <= 760 ? 'vertical' : 'horizontal';
+
+                            return direction;
+                        }
+</script>

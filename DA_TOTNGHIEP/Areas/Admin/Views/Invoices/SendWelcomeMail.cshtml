@@ -1,0 +1,34 @@
+﻿@model DA_TOTNGHIEP.Models.Invoices
+
+@{
+    ViewData["Title"] = "Chỉnh sửa hoá đơn";
+    Layout = null;
+}
+
+<h4>Gửi hoá đơn qua Email</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="SendWelcomeMail" asp-controller="Invoices">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Fullname" class="control-label"></label>
+                <input asp-for="Fullname" class="form-control" value="@ViewBag.Fullname" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" value="@ViewBag.Email" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" value="@ViewBag.Code" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Gửi" class="btn btn-primary" />
+                <span value="Đóng" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">Đóng</span>
+            </div>
+        </form>
+
+    </div>
+</div>

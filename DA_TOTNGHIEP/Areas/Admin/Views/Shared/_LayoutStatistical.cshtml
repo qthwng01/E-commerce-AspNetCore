@@ -1,0 +1,314 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin C&T Shop</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/assetsAdmin/css/bootstrap.css">
+    <link rel="stylesheet" href="~/assetsAdmin/vendors/iconly/bold.css">
+    <link rel="stylesheet" href="~/assetsAdmin/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="~/assetsAdmin/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="~/assetsAdmin/css/app.css">
+    <link rel="stylesheet" href="~/assetsAdmin/css/pages/modal.css">
+    <link rel="shortcut icon" href="~/assetsAdmin/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="~/assetsAdmin/css/loading.css" />
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <div class="d-flex justify-content-center">
+                        <div class="logo">
+                            <a href="index.html"><img src="~/assetsAdmin/images/logo/logoC&T.png" style=" height: 3rem;" alt="Logo" srcset=""></a>
+                        </div>
+                        <div class="toggler">
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">Menu</li>
+
+                        <li class="sidebar-item  ">
+                            <a asp-controller="Dashboard" asp-action="Index" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item  ">
+                            <a asp-controller="StatiscalInvoices" asp-action="Index" class='sidebar-link'>
+                                <i class='bx bxs-receipt'></i>
+                                <span>Thống kê doanh thu </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class='bx bxs-notepad'></i>
+                                <span>Hoá đơn</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a asp-controller="Invoices" asp-action="Index">Danh sách hoá đơn</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a asp-controller="Invoices" asp-action="Pending">Danh sách đơn chờ duyệt</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class='bx bxl-product-hunt'></i>
+                                <span>Sản phẩm</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a asp-controller="Products" asp-action="Index">Danh sách sản phẩm</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a asp-controller="ProductTypes" asp-action="Index">Danh sách loại sản phẩm</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a asp-controller="ImageProducts" asp-action="Index">Danh sách hình ảnh sản phẩm</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class='bx bxs-user-account'></i>
+                                <span>Tài khoản</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="layout-default.html">Thống kê hoá đơn</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="layout-default.html">Hoá đơn đang giao</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="layout-vertical-1-column.html">Hoá đơn chờ duyệt</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class='bx bxs-package'></i>
+                                <span>Quản lí kho</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a asp-controller="Warehouses" asp-action="Index">Danh sách kho</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a asp-controller="ImportWarehouses" asp-action="Index">Danh sách phiếu nhập kho</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a asp-controller="WarehouseDetails" asp-action="Index">Danh sách lô</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+        <div id="main" class='layout-navbar'>
+            <header class='mb-3'>
+                <nav class="navbar navbar-expand navbar-light ">
+                    <div class="container-fluid">
+                        <a href="#" class="burger-btn d-block">
+                            <i class="bi bi-justify fs-3"></i>
+                        </a>
+
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                    </div>
+                </nav>
+            </header>
+            <div id="main-content">
+
+                <div class="page-heading">
+                    <div class="page-title">
+                        <div class="row">
+                            <div class="col-12 col-md-6 order-md-1 order-last">
+                                <h3>Báo cáo thống kê doanh thu theo ngày, tháng</h3>
+                            </div>
+                            <form asp-controller="StatiscalInvoices" asp-action="Index" method="get">
+                                <h3>Lựa chọn doanh thu theo ngày, tháng:</h3>
+                                <input type="date" id="birthdaytime" name="fromDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                                <input type="date" id="birthdaytime" name="toDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                                <input type="submit" value="Lọc" style="
+                                                                    border: 1px solid #2665f2;
+                                                                    border-radius: 7px;
+                                                                    padding: 10px;
+                                                                    background: #1984ff;
+                                                                    color: #fff;
+                                                                ">
+                            </form>
+                        </div>
+                    </div>
+                    <section class="section">
+                        <div class="page-content">
+                            <section class="row">
+                                <div class="col-12 col-lg-12">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body" style="padding-bottom:3.7rem">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="text-muted font-semibold">Tổng hoá đơn</h6>
+                                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px">@ViewBag.countInvoices</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body px-3 py-4-5">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="text-muted font-semibold">Tổng hoá đơn chưa duyệt</h6>
+                                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px"> @ViewBag.countUnApprove </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body px-3 py-4-5">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="text-muted font-semibold">Tổng hoá đơn đã duyệt</h6>
+                                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px"> @ViewBag.countApproved </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body px-3 py-4-5">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="text-muted font-semibold">Tổng hoá đơn đã huỷ</h6>
+                                                            <h6 class="font-extrabold mb-0" style="color:#ff0202;font-size:20px"> @ViewBag.countCancel </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body px-3 py-4-5">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="text-muted font-semibold">Tổng hoá đơn đang giao</h6>
+                                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px"> @ViewBag.countShip </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body" style="padding-bottom:2.6rem">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="text-muted font-semibold">Tổng số doanh thu</h6>
+                                                            <h6 class="font-extrabold mb-0" style="color: #fad900; font-size: 20px">@ViewBag.total</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @RenderBody()
+
+                                </div>
+
+                            </section>
+                        </div>
+                    </section>
+                </div>
+
+                @*Modal CRUD*@
+                <div class="modal" tabindex="-1" role="dialog" id="form-modal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content" style="margin:30px 0 0 -127px;width: 170%;">
+                            <div class="modal-header" style="border-bottom: none; padding: 0px; ">
+                                <h2 class="modal-title"></h2>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fa-solid fa-xmark" style="height:25px;width:25px; "></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*Modal CRUD*@
+
+                <div class="loaderbody" id="loaderbody">
+                    <div class="loader"></div>
+                </div>
+
+                <footer>
+                    <div class="footer clearfix mb-0 text-muted">
+                        <div class="float-start">
+                            <p>2021 &copy; Mazer</p>
+                        </div>
+                        <div class="float-end">
+                            <p>
+                                Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
+                                by <a href="https://ahmadsaugi.com">Saugi</a>
+                            </p>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/assetsAdmin/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="~/assetsAdmin/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assetsAdmin/vendors/apexcharts/apexcharts.js"></script>
+    <script src="~/assetsAdmin/js/pages/dashboard.js"></script>
+    <script src="~/assetsAdmin/js/mazer.js"></script>
+    <script src="~/assetsAdmin/js/site.js" asp-append-version="true"></script>
+
+    @await Component.InvokeAsync("Notyf")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+

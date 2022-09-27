@@ -1,0 +1,145 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.Invoices>
+
+@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<style>
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 150px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
+<link href="~/assetsUser/assets/css/cart-success.css" rel="stylesheet" />
+<!-- Start Ads -->
+<section class="main-cart-success">
+    <div class="body-cart-success">
+        <div class="container section-detail">
+            <ul class="breadcumb">
+                <li>
+                    <a asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+                    <meta property="position" content="1">
+                </li>
+                <li>
+                    <span>›</span>
+                    <a asp-controller="Carts" asp-action="Index">Giỏ hàng</a>
+                    <meta property="position" content="2">
+                </li>
+                <li>
+                    <span>›</span>
+                    <a asp-controller="Carts" asp-action="Pay">Thông tin đặt hàng</a>
+                    <meta property="position" content="3">
+                </li>
+                <li>
+                    <span>›</span>
+                    <a asp-controller="Carts" asp-action="Ordersuccess">Đặt hàng thành công</a>
+                    <meta property="position" content="4">
+                </li>
+            </ul>
+        </div>
+        <div class="header-cart-success">
+            <a asp-controller="Carts" asp-action="Index">
+                <div class="go-back-cart-success">
+                    <i class="fas fa-angle-left"></i>
+                    <p class="title-back">Trở về</p>
+                </div>
+            </a>
+            <p class="title-cart-success">
+                Hoàn tất
+            </p>
+        </div>
+        <div class="main-cart-success">
+            <div class="row">
+                <div class="container container-cart-success-main">
+                    <div class="container message-cart-success">
+                        Cảm ơn Quý khách hàng đã chọn mua hàng tại C&T Phone. <br />
+                        Cần được hỗ trợ hãy gọi ngay hotline: <a href="tel:18001234" style="color:blue;">18001234.</a>
+                    </div>
+                    <div class="cart-success-info">
+                        <div class="title-cart-success-info">
+                            Đặt hàng thành công
+                        </div>
+                        @foreach (var item in Model)
+                        {
+                            <p>Người nhận: <span>@item.Fullname</span></p>
+                            <p>Số Điện Thoại: <span>@item.ShippingPhone</span></p>
+                            <p>Địa chỉ: <span>@item.ShippingAddress</span></p>
+                            <p>Email: <span>@item.Email</span></p>
+                            <p>
+                                Mã đơn hàng: <input disabled type="text" value="@item.Code" id="myInput" style="border:none;background:none;width:0px">
+                                <span>@item.Code</span>
+                                <button onclick="myFunction()" onmouseout="outFunc()" style="border:none;background:none;cursor:pointer" class="tooltip">
+                                    <span class="tooltiptext" id="myTooltip">Sao chép mã đơn hàng</span>
+                                    <i class='bx bxs-copy' style=" font-size: 20px; " undefined></i>
+                                </button><span style="font-weight: 500; font-size: 15px;">(Sao chép mã để xem chi tiết đơn hàng)</span>
+                            </p>
+                            <p>Tổng Tiền: <span>@item.Total.ToString("#,##VNĐ")</span></p>
+                        }
+                    </div>
+                    <div class="button-cart-success">
+                        <a asp-controller="Home" asp-action="SearchOrder" target="_blank">
+                            <div class="button-detail-order">
+                                <p>Xem chi tiết đơn hàng</p>
+                                <p><i class="fas fa-check-circle"></i></p>
+                            </div>
+                        </a>
+                        <a asp-controller="Home" asp-action="Index">
+                            <div class="button-other">
+                                <p>Tiếp tục mua hàng</p>
+                                <p><i class="fas fa-cart-plus"></i></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!-- End Ads -->
+<script>
+    function myFunction() {
+        var copyText = document.getElementById("myInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+
+        var tooltip = document.getElementById("myTooltip");
+        tooltip.innerHTML = "Đã sao chép: " + copyText.value;
+    }
+
+    function outFunc() {
+        var tooltip = document.getElementById("myTooltip");
+        tooltip.innerHTML = "Sao chép mã đơn hàng";
+    }
+</script>

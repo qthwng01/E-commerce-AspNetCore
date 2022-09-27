@@ -1,0 +1,86 @@
+﻿@model DA_TOTNGHIEP.Models.ImageProduct
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = null;
+}
+<style>
+    .modal-content {
+        width: 40rem;
+    }
+</style>
+<div>
+    <h3>Tất cả ảnh của <span class="badge bg-info">@Model.CodeImage</span></h3>
+    <hr />
+    <div class="row" style="text-align:center">
+        <div class="col-md-4">
+            @if (Model.ImageName != null)
+            {
+                <h6 style="color:red">*Hình ảnh chính*</h6>
+                <td>
+                    <img src="~/assetsAdmin/imgProducts/@Model.ImageName" style="width: 130px;height: 130px" alt="" />
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </div>
+        <div class="col-md-4">
+            @if (Model.ImageName1 != null)
+            {
+                <h6>Hình ảnh 1</h6>
+                <td>
+                    <img src="~/assetsAdmin/imgProducts/@Model.ImageName1" style="width: 130px;height: 130px" alt="" />
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </div>
+        <div class="col-md-4">
+            @if (Model.ImageName2 != null)
+            {
+                <h6>Hình ảnh 2</h6>
+                <td>
+                    <img src="~/assetsAdmin/imgProducts/@Model.ImageName2" style="width: 130px;height: 130px" alt="" />
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </div>
+        <div class="col-md-4" style="margin-top: 20px;">
+            @if (Model.ImageName3 != null)
+            {
+                <h6>Hình ảnh 3</h6>
+                <td>
+                    <img src="~/assetsAdmin/imgProducts/@Model.ImageName3" style="width: 130px;height: 130px" alt="" />
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </div>
+        <div class="col-md-4" style="margin-top: 20px;">
+            @if (Model.ImageName4 != null)
+            {
+                <h6>Hình ảnh 4</h6>
+                <td>
+                    <img src="~/assetsAdmin/imgProducts/@Model.ImageName4" style="width: 130px;height: 130px" alt="" />
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </div>
+    </div>
+</div>
+@*<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>*@

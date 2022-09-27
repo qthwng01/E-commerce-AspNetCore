@@ -1,0 +1,166 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<!--Breadcumb-->
+<div class="container section-order">
+    <ul class="breadcumb">
+        <li>
+            <a asp-controller="Home" asp-action="Index"><i class='bx bxs-home'></i> Trang Chủ</a>
+            <meta property="position" content="1">
+        </li>
+        <li>
+            <span>›</span>
+            <a href="">Tra Cứu Đơn Hàng</a>
+            <meta property="position" content="2">
+        </li>
+    </ul>
+</div>
+
+<!--Tra cứu-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="search">
+                <h2>KIỂM TRA THÔNG TIN ĐƠN HÀNG & THÔNG TIN VẬN CHUYỂN</h2>
+                <form asp-controller="Home" asp-action="SearchOrder" method="post">
+                    <div class="form-search-order">
+                        <ul>
+                            @*<li>
+                                    <label>Số điện thoại:</label>
+                                    <input type="text" name="phoneNumber" id="phoneNumber" placeholder="Bắt buộc">
+                                </li>*@
+                            <li>
+                                <label>Mã đơn hàng:</label>
+                                <input type="text" name="searchOrder" id="codeOrder" placeholder="Nhập mã đơn hàng...">
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <p id="error" class="contact-form-error">Vui lòng nhập thông tin!</p>
+
+                    <button class="btn-check" type="submit" style="cursor:pointer">KIỂM TRA</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewBag.KeyOrder != null && ViewBag.KeyOrder != "" && Model.Count() > 0)
+{
+    @foreach (var item in Model.Take(1))
+    {
+        <!--Thông tin tra cứu-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 pt-5 mb-6">
+                    <div class="info-order">
+
+                        <div class="badge">
+                            <h2>THÔNG TIN ĐƠN HÀNG CỦA BẠN</h2>
+                            <div class="border-badge" style=" width: 30%;">
+                                <p style="display: contents;font-weight: 600;font-size: 15px;">ĐƠN HÀNG<span style="font-size: 15px; font-weight: bold; background: none; color: #1a73e8;">
+                                                                                                #@item.Invoice.Code
+                                                                                                      </span>
+                                </p>
+                                @if (item.Invoice.StatusId == 0)
+                                {
+                                    <span>Chờ duyệt</span>
+                                }
+                                @if (item.Invoice.StatusId == 1)
+                                {
+                                    <span>Đang giao hàng</span>
+                                }
+                                @if (item.Invoice.StatusId == 2)
+                                {
+                                    <span>Hủy đơn</span>
+                                }
+                                @if (item.Invoice.StatusId == 3)
+                                {
+                                    <span>Giao dịch không thành công</span>
+                                }
+                                @if (item.Invoice.StatusId == 4)
+                                {
+                                    <span>Đã giao</span>
+                                }
+
+
+                            </div>
+                        </div>
+
+                        <table class="table" style="width:70%">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    @*<th>Màu</th>*@
+                                    <th>Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (item.InvoiceId == item.Invoice.Id)
+                                {
+                                    var totalProduct = 0;
+                                    @foreach (var item2 in Model)
+                                    {
+                                        <tr>
+                                            <td>@item2.Product.Name</td>
+                                            <td>@item2.Quantity</td>
+                                            @*<td>Đen</td>*@
+                                            <td style="display:none">@(totalProduct = item2.UnitPrice * item2.Quantity)</td>
+                                            <td>@totalProduct.ToString("##,#0") ₫</td>
+                                        </tr>
+                                    }
+                                }
+                                else { }
+                                <tr>
+                                    <td></td>
+                                    @*<td></td>*@
+                                    <td style="font-weight: 800;">Tổng thanh toán</td>
+                                    <td style="font-weight: 800;">@item.Invoice.Total.ToString("#,##0") ₫</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h2 style="margin:20px 0 20px 0;">THÔNG TIN VẬN CHUYỂN</h2>
+
+                        <div class="border-info" style="background: #eeeeee; font-size: 16px; line-height: 26px; height: 180px; width: 40%; ">
+                            <p>
+                                Tên người nhận:
+                                <span style="font-weight: 700;">@item.Invoice.Fullname</span>
+                            </p>
+                            <br>
+                            <p>
+                                Số điện thoại:
+                                <span style="font-weight: 700;">@item.Invoice.ShippingPhone</span>
+                            </p>
+                            <br>
+                            <p>
+                                Địa chỉ Email:
+                                <span style="font-weight: 700;">@item.Invoice.Email</span>
+                            </p>
+                            <br>
+                            <p>
+                                Hình thức thanh toán:
+                                <span style="font-weight: 700;">@item.Payment</span>
+                            </p>
+                            <br>
+                            <p>
+                                Địa chỉ giao hàng:
+                                <span style="font-weight: 700;">@item.Invoice.ShippingAddress</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr style="margin-top:20px" />
+    }
+}
+else if (ViewBag.KeyOrder != null && ViewBag.KeyOrder != "" && Model.Count() == 0)
+{
+    <h1 style=" margin-top: 15px; text-align: center;"><i class="fas fa-times-circle" style="color:red"></i> Đơn hàng không tồn tại <i class="fas fa-times-circle" style="color:red"></i></h1>
+}
+<div style="margin-bottom: 5rem;"></div>

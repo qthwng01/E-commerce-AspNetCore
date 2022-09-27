@@ -1,0 +1,134 @@
+.body-voucher {
+    width:40%;
+    margin: auto;
+    margin-top: 150px;
+}
+.body-voucher .header-voucher {
+    display: flex;
+    padding: 15px 0px;
+}
+.header-voucher .go-back-voucher {
+    font-size: 16px;
+    font-weight: bold;
+    color:#D70018;
+    display: flex;
+}
+.header-voucher .go-back-voucher .title-back {
+    padding-left: 5px;
+}
+.header-voucher .go-back-voucher .title-back:hover {
+    text-decoration: underline;
+}
+.header-voucher .title-voucher {
+    font-size: 20px;
+    font-weight: bold;
+    color:#D70018;
+    margin: auto;
+}
+.main-voucher .container-voucher {
+    border: 1px solid #fff;
+    border-radius: 5px;
+    box-shadow:0 1px 2px 0 rgb(60 64 67 / 10%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 100%;
+}
+.container-voucher .apply-voucher{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.container-voucher .apply-voucher i{
+    font-size: 30px;
+}
+.container-voucher .apply-voucher input {
+    background-color: #f3f4f6;
+    border: 1px solid #000;
+    border-radius: 5px;
+    width: 70%;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 20px;
+}
+.container-voucher .apply-voucher .button-apply{
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 5px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    background-color: #d70018;
+}
+.main-voucher .container-voucher-main {
+    border: 1px solid #fff;
+    border-radius: 5px;
+    box-shadow:0 1px 2px 0 rgb(60 64 67 / 10%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 100%;
+}
+.container-voucher-main .title-voucher-info {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+}
+.container-voucher-main p {
+    font-size: 18px;
+    line-height: 40px;
+}
+.container-voucher-main span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+.main-voucher .container-payment-info {  
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 10px 10px;
+    box-shadow:0 1px 2px 0 rgb(60 64 67 / 10%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+}
+.main-voucher .container-payment-info .content-payment-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.main-voucher .content-payment-info .label-total {
+    font-size: 18px;
+    font-weight: 600;
+}
+.main-voucher .content-payment-info .total {
+    font-size: 18px;
+    font-weight: 600;
+    color: #d70018;
+}
+.main-voucher .container-payment-info .content-order {
+    text-transform: uppercase;
+}   
+.main-voucher .container-payment-info .content-order .button-payment input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    background-color: #d70018;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+    border: 1px solid #d70018;
+    border-radius: 5px;
+}

@@ -1,0 +1,289 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Products>,IEnumerable<DA_TOTNGHIEP.Models.Comment>>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "ProductResult Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+<style>
+    .product {
+        margin-top:160px;
+    }
+    .list-product {
+        position: relative
+    }
+
+        .list-product .swiper {
+            margin-top: 5px;
+        }
+
+            .list-product .swiper .swiper-wrapper .swiper-slide {
+                height: 440px;
+            }
+
+    .swiper-slide {
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+        .swiper-slide .items-product .content-product {
+            line-height: 25px;
+            padding: 10px;
+        }
+
+        .swiper-slide .items-product .name-product {
+            text-align: left;
+            font-weight: bold;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .swiper-slide .items-product .price-product {
+            display: flex;
+        }
+
+            .swiper-slide .items-product .price-product .special-price {
+                font-weight: bold;
+                font-size: 15px;
+                color: #d70018;
+            }
+
+            .swiper-slide .items-product .price-product .old-price {
+                padding-left: 15px;
+                font-size: 12px;
+                text-decoration: line-through;
+            }
+
+        .swiper-slide .items-product .evaluate {
+            /* margin-bottom: 20px; */
+            display: flex;
+            font-size: 13px;
+        }
+
+            .swiper-slide .items-product .evaluate .evaluate-star .fa-star.checked {
+                color: #F59E0B;
+            }
+            .swiper-slide .items-product .evaluate .evaluate-star .fa-star.unchecked {
+                color: #808080;
+            }
+                .swiper-slide .items-product .evaluate .evaluate-quantity {
+                    padding-left: 10px;
+                }
+</style>
+<div class="product">
+    <div class="product-outstanding">
+        <div class="title-product-search" style="text-align: center;">
+            @if(ViewBag.KeySearch != "" && Model.Item1.Count() != 0)
+            {     
+            <p class="main-title-search" style="font-size:18px">
+                Tìm thấy <span style="font-weight:bold">@Model.Item1.Count()</span>
+                sản phẩm cho từ khóa <span style="font-weight:bold">'@ViewBag.KeySearch'</span>
+            </p>
+            }
+            else if (ViewBag.KeySearch != "" && Model.Item1.Count() == 0)
+            {
+            <p class="main-title-search" style="font-size:18px">
+                Tìm thấy <span style="font-weight:bold">@Model.Item1.Count()</span>
+                sản phẩm cho từ khóa <span style="font-weight:bold">'@ViewBag.KeySearch' <i class="far fa-frown"></i></span>
+            </p>
+            }
+        </div>
+        <div class="list-product">
+            <div class="row">
+                @foreach (var item in Model.Item1)
+                {
+                    int ratingCount = 0;
+                    int? ratingAverage = 0;
+                    int? sumRating = 0;
+                    @if (item.Status == true)
+                    {
+                        <div class="col-md-3">
+                            <div class="items-product">
+                                @if (item.ImageProductId == null)
+                                {
+                                    <div class="image-product">
+                                        <a href="">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" alt="" />
+                                            <h3>No data</h3>
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="image-product">
+                                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                            <img src="~/assetsAdmin/imgProducts/@item.ImageProductss.ImageName" style="width: 220px; height: 220px " alt="">
+                                        </a>
+                                    </div>
+
+                                }
+                                <div class="content-product">
+                                    <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                        <div class="name-product" style="font-size: 16px">@item.Name</div>
+                                    </a>
+                                    <div class="price-product">
+                                        <p class="special-price">@item.Price.ToString("#,##0") ₫</p>
+                                        <p class="old-price">34.900.000 ₫</p>
+                                    </div>
+                                    @foreach (var item2 in Model.Item2)
+                                    {
+                                        @if (item.Id == item2.ProductId)
+                                        {<span style="display:none">@(sumRating += item2.Rating)</span>
+                                            <span style="display:none">@((ratingCount += 1))</span>
+                                            <span style="display:none">@((ratingAverage = sumRating / ratingCount))</span>
+                                        }
+                                    }
+                                    <div class="evaluate" style="font-size:13px">
+                                        <div class="evaluate-star">
+                                            @if (ratingAverage == 0)
+                                            {
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 1)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 2)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 3)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 4)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star unchecked"></i>
+                                            }
+                                            @if (ratingAverage == 5)
+                                            {
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                                <i class="fas fa-star checked"></i>
+                                            }
+                                        </div>
+                                        <div class="evaluate-quantity">
+                                            <span>@ratingCount đánh giá</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                    }
+                }
+            </div>
+            @if (Model.Item1.Count() > 4)
+            {
+                <a href="#" id="loadMore">Xem thêm sản phẩm <i class="fas fa-caret-down"></i></a>
+            }
+        </div>
+    </div>
+</div>
+<div class="brand-page">
+    <div class="title-brand-page">
+        <p class="main-title">CHUYÊN TRANG THƯƠNG HIỆU</p>
+    </div>
+    <div class="content-brand-page">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-apple-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-samsung-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-asus-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-xiaomi-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper', {
+        slidesPerView: 4,
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        direction: getDirection(),
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        on: {
+            resize: function () {
+                swiper.changeDirection(getDirection());
+            },
+        },
+    });
+
+    function getDirection() {
+        var windowWidth = window.innerWidth;
+        var direction = window.innerWidth <= 760 ? 'vertical' : 'horizontal';
+
+        return direction;
+    }
+</script>

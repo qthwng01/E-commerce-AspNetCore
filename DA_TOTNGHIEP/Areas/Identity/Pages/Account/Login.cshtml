@@ -1,0 +1,75 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+
+<div class="login-page" style="margin-top:6rem;">
+    <div class="form">
+        <h2 style="margin-bottom: 1rem;">ĐĂNG NHẬP</h2>
+        <form class="login-form" id="account" method="post">
+            <div asp-validation-summary="All" style="color:red"></div>
+            <di>
+                <input asp-for="Input.Email" placeholder="Email" class="form-control" />
+                <span asp-validation-for="Input.Email" style="color:red"></span>
+            </di>
+            <div>
+                <input asp-for="Input.Password" placeholder="Password" class="form-control" />
+                <span asp-validation-for="Input.Password" style="color:red"></span>
+            </div>
+            <div>
+                @*<div>
+                <input asp-for="Input.RememberMe" /> @Html.DisplayNameFor(m => m.Input.RememberMe)
+            </div>*@
+            </div>
+            <button type="submit">đăng nhập</button>
+            <p class="message">Chưa có tài khoản? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Đăng ký</a></p>
+            <p class="message">
+                Quên mật khẩu
+                <a id="forgot-password" asp-page="./ForgotPassword">Lấy lại mật khẩu?</a>
+            </p>
+            
+            <p class="message">Trang quản trị <a asp-controller="Dashboard" asp-action="Index" asp-area="Admin">Đăng nhập</a></p>
+        </form>
+        <section style="display:flex">
+            <div class="message">Hoặc đăng nhập bằng</div>
+
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div style="display:none">
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p style="display:flex">
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    if (provider.DisplayName == "Facebook")
+                                    {
+                                        <button type="submit" name="provider" value="@provider.Name" title="Đăng nhập bằng @provider.DisplayName" style="border:none; background:none;padding-right:10px"><img style="width: 40px" src="https://www.facebook.com/images/fb_icon_325x325.png" /></button>
+                                    }
+                                    if (provider.DisplayName == "Google")
+                                    {
+                                        <button type="submit" name="provider" value="@provider.Name" title="Đăng nhập bằng @provider.DisplayName" style="border:none; background:none;padding-right:10px"><img style="width: 40px" src="https://yt3.ggpht.com/ytc/AKedOLQewDiyDHyBbV2N23wQuVH0dK0Dj0hMZwQQvIxF6w=s900-c-k-c0x00ffffff-no-rj" /></button>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+
+            }
+        </section>
+    </div>
+    
+</div>

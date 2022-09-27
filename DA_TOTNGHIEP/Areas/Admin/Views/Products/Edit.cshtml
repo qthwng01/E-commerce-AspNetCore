@@ -1,0 +1,72 @@
+﻿@model DA_TOTNGHIEP.Models.Products
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+
+<h3>Sửa sản phẩm</h3>
+<hr />
+<form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
+    <div class="row">
+        <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Sku" class="control-label"></label>
+                <input asp-for="Sku" class="form-control" />
+                <span asp-validation-for="Sku" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows='8'></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ListedPrice" class="control-label"></label>
+                <input asp-for="ListedPrice" class="form-control" />
+                <span asp-validation-for="ListedPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stock" class="control-label"></label>
+                <input asp-for="Stock" class="form-control" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="ImageProductId" class="control-label"></label>
+                <select asp-for="ImageProductId" class="form-control" asp-items="ViewBag.ImageProductId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeId" class="control-label"></label>
+                <select asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="WarehouseId" class="control-label"></label>
+                <select asp-for="WarehouseId" class="form-control" asp-items="ViewBag.WarehouseId"></select>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="ShipmentId" class="control-label"></label>
+                <select asp-for="ShipmentId" class="form-control" asp-items="ViewBag.ShipmentId"></select>
+            </div>*@
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
+                </label>
+            </div>
+        </div>
+        <div class="form-group" style="text-align:center">
+            <input type="submit" value="Sửa" class="btn btn-primary" />
+        </div>
+</form>

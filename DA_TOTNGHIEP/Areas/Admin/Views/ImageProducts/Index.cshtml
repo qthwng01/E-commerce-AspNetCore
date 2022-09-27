@@ -1,0 +1,11 @@
+﻿@model IEnumerable<DA_TOTNGHIEP.Models.ImageProduct>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div id="view-all">
+    @await Html.PartialAsync("_ViewAll", Model)
+</div>

@@ -1,0 +1,122 @@
+﻿@model DA_TOTNGHIEP.Models.Invoices
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    int doanhThu = ViewBag.doanhthu;
+            }
+<link href="~/assetsAdmin/vendors/chartjs/Chart.css" rel="stylesheet" />
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Báo cáo thống kê doanh thu theo ngày, tháng</h3>
+            </div>
+            <form asp-controller="StatiscalInvoices" asp-action="Index" method="get">
+                <h3>Lựa chọn doanh thu theo ngày, tháng:</h3>
+                Từ ngày: <input type="date" id="birthdaytime" name="fromDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                đến ngày: <input type="date" id="birthdaytime" name="toDate" style="
+                                    border: 1px solid;
+                                    border-radius: 7px;
+                                    padding: 8px;
+                                ">
+                <input type="submit" value="Lọc" style="
+                                                                    border: 1px solid #2665f2;
+                                                                    border-radius: 7px;
+                                                                    padding: 10px;
+                                                                    background: #1984ff;
+                                                                    color: #fff;
+                                                                ">
+            </form>
+        </div>
+    </div>
+    <section class="section">
+        <div class="page-content">
+            <section class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body" style="padding-bottom:3.7rem">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Tổng hoá đơn</h6>
+                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px">@ViewBag.countInvoices</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Tổng hoá đơn chưa duyệt</h6>
+                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px"> @ViewBag.countUnApprove </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Tổng hoá đơn đã duyệt</h6>
+                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px"> @ViewBag.countApproved </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Tổng hoá đơn đang giao</h6>
+                                            <h6 class="font-extrabold mb-0" style="color: #ff0202; font-size: 20px"> @ViewBag.countShip </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Tổng hoá đơn đã huỷ</h6>
+                                            <h6 class="font-extrabold mb-0" style="color:#ff0202;font-size:20px"> @ViewBag.countCancel </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body" style="padding-bottom:2.6rem">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Tổng số doanh thu</h6>
+                                                <h6 class="font-extrabold mb-0" style="color: #fad900; font-size: 20px">@doanhThu.ToString("###,0 đ")</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </div>
+    </section>
+</div>

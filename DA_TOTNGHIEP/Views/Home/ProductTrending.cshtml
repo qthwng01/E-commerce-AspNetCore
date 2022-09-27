@@ -1,0 +1,711 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Products>, IEnumerable<DA_TOTNGHIEP.Models.Comment>>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "ProductAll Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+<style>
+    .items-product {display: none;}
+
+    .product {
+    margin-top:160px;
+    }
+    .list-product {
+    position: relative
+    }
+    .filter-produt-all .filter-product-title {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    @*Dropdown*@
+    .dropbtn {
+    background-color: #e5e5e5;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #000;
+    padding: 9px;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #d2d2d2;
+    }
+
+    .dropdown {
+    margin-right: 1rem;
+    position: relative;
+    display: inline-block;
+    }
+
+    .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 410px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    z-index: 1;
+    padding: 5px;
+    }
+
+    .dropdown-content button {
+        font-size: 15px;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+    .dropdown-content .dropdown-price {
+        float: left;
+        border: 1px solid #000;
+        border-radius: 1rem;
+        margin: 5px;
+    }
+    .dropdown button:hover {
+    background-color: #ddd;
+    }
+
+    .show {
+    display: block;
+    }
+    @*End-Dropdown*@
+    @*Dropdown-Brand*@
+    .dropbtnBrand {
+    background-color: #e5e5e5;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #000;
+    padding: 9px;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    .dropbtnBrand:hover, .dropbtnBrand:focus {
+    background-color: #d2d2d2;
+    }
+
+    .dropdownBrand {
+    position: relative;
+    display: inline-block;
+    }
+
+    .dropdown-content-Brand {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 380px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    z-index: 1;
+    padding: 5px;
+    }
+
+    .dropdown-content-Brand button {
+    font-size: 15px;
+    color: black;
+    padding: 11px 11px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    }
+    .dropdown-content-Brand button img {
+    width: 80px;
+    height: 17px;
+    display: flex;
+    }
+
+    .dropdown-content-Brand .dropdown-Brand {
+    background: #fff;
+    float: left;
+    border: 1px solid #e0e0e0;
+    border-radius: 1rem;
+    margin: 5px;
+    }
+    .dropdown-content-Brand .dropdown-Brand:hover {
+    border: 1px solid #0094ff;
+    }
+    .dropdownBrand .dropbtnBrand:hover {
+    background-color: #ddd;
+    }
+    .showBrand {
+    display: block;
+    }
+    @*End-Dropdown-Brand*@
+
+    .collapsible {
+        background-color: #e5e5e5;
+        color: #000;
+        font-size: 15px;
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #000;
+        border-radius: 1rem;
+        text-align: center;
+        outline: none;
+    }
+
+        .active, .collapsible:hover {
+            background-color: #ddd;
+        }
+
+        .collapsible:after {
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+    @*Dropdown-All*@ 
+    .dropdownAll {
+        margin-right: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdownAll a {
+        font-size: 15px;
+        color: black;
+        padding: 11px 11px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+
+        .dropdownAll a img {
+            width: 80px;
+            height: 17px;
+            display: flex;
+        }
+
+    .dropdownAll input {
+        font-size: 15px;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+
+    .dropdownAll .dropdown-All {
+        float: left;
+        border: 1px solid #000;
+        border-radius: 1rem;
+        margin: 5px;
+    }
+
+    .dropdownAll a.dropdown-All:hover {
+        border: 1px solid #0094ff;
+    }
+
+    .dropdownAll input.dropdown-All:hover {
+        background-color: #ddd;
+    }
+
+    .dropdownAll .button-result {
+        border: 1px solid #000;
+        border-radius: 5px;
+        background: #288ad6;
+        color: #fff;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 10px;
+        margin: auto;
+    }
+
+    .content {
+        z-index: 1;
+        position: absolute;
+        width: 520px;
+        height: 245px;
+        box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+        border-radius: 8px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        background-color: #fff;
+    }
+
+        .content label input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content label span.yes {
+            display: none;
+        }
+
+        .content label span.no {
+            display: inline;
+        }
+
+        .content label input:checked ~ span.yes {
+            background: #FEF2F2;
+            display: inline;
+        }
+
+        .content label input:checked ~ span#dropdown-All {
+            border: 1px solid #d70018;
+        }
+
+        .content label input:checked ~ span.no {
+            display: none;
+        }
+
+        .content #dropdown-All {
+            padding: 11px 11px;
+            float: left;
+            border: 1px solid #e0e0e0;
+            border-radius: 1rem;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+            .content #dropdown-All:hover {
+                border: 1px solid #0094ff;
+            }
+
+            .content #dropdown-All img {
+                width: 80px;
+                height: 17px;
+                display: flex;
+            }
+
+    @*End-Dropdown-All*@
+    @*Sort*@
+    .sort-product-all .sort-product-title {
+        font-weight: bold;
+        font-size: 16px;
+        margin: 10px 0px;
+    }
+    .sort-product-all .sort-product-content a {
+        color: #000;
+    }
+    .sort-product-all .sort-product-content .sort-product-ascending {
+        margin-right: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 7px;
+        background-color: #e5e5e5;
+        cursor: pointer;
+    }
+    .sort-product-all .sort-product-content .sort-product-descending {
+            margin-right: 5px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            padding: 7px;
+            background-color: #e5e5e5;
+            cursor: pointer;
+        }
+    .sort-product-all .sort-product-content .sort-product-trending {
+        margin-right: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 7px;
+        background-color: #e5e5e5;
+        cursor: pointer;
+    }
+    @*End-Sort*@
+    @*Load More*@ #loadMore {
+        font-size: 15px;
+        font-weight: 500;
+        width: 220px;
+        color: #000;
+        display: block;
+        text-align: center;
+        margin: 20px auto;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #000;
+        background-color: #fff;
+        transition: .3s;
+    }
+
+    #loadMore:hover {
+        color: #d70018;
+        background-color: #fef2f2;
+        border: 1px solid #d70018;
+        text-decoration: none;
+    }
+
+    .noContent {
+        color: #000 !important;
+        background-color: transparent !important;
+        pointer-events: none;
+    }
+
+    @*End Load More*@
+</style>
+<div class="product">
+    <div class="product-outstanding">
+        <div class="filter-produt-all">
+            <div class="filter-product-title">Chọn theo tiêu chí</div>
+            <div class="filter-product-content">
+                <div class="dropdownAll">
+                    <button type="button" class="collapsible">Bộ lọc <i class="fas fa-filter"></i></button>
+                    <div class="content">
+                        <form asp-controller="Home" asp-action="AllProduct" method="get">
+                            <div style="display: flex; padding: 10px;">
+                                <div style="width:50%">
+                                    <p style="font-size: 14px; font-weight: 600; padding: 5px 0px; ">Hãng điện thoại</p>
+                                    <label>
+                                        <input type="checkbox" name="brand" value="Apple" />
+                                        <span class="yes" id="dropdown-All"><img src="https://cellphones.com.vn/media/icons/brands/brand-286.svg" alt="" /></span>
+                                        <span class="no" id="dropdown-All"><img src="https://cellphones.com.vn/media/icons/brands/brand-286.svg" alt="" /></span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="brand" value="SamSung" />
+                                        <span class="yes" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png" alt="" /></span>
+                                        <span class="no" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png" alt="" /></span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="brand" value="Xiaomi" />
+                                        <span class="yes" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png" alt="" /></span>
+                                        <span class="no" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png" alt="" /></span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="brand" value="Oppo" />
+                                        <span class="yes" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg" alt="" /></span>
+                                        <span class="no" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg" alt="" /></span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="brand" value="Nokia" />
+                                        <span class="yes" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg" alt="" /></span>
+                                        <span class="no" id="dropdown-All"><img src="https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg" alt="" /></span>
+                                    </label>
+                                </div>
+                                <div style="width:50%">
+                                    <p style="font-size: 14px; font-weight: 600; padding: 5px 0px;">Giá</p>
+                                    <label style="font-size:13px">
+                                        <input type="checkbox" name="price" value="Dưới 5 triệu" />
+                                        <span class="yes" id="dropdown-All">Dưới 5 triệu</span>
+                                        <span class="no" id="dropdown-All">Dưới 5 triệu</span>
+                                    </label>
+                                    <label style="font-size:13px">
+                                        <input type="checkbox" name="price" value="5 - 10 triệu" />
+                                        <span class="yes" id="dropdown-All">5 - 10 triệu</span>
+                                        <span class="no" id="dropdown-All">5 - 10 triệu</span>
+                                    </label>
+                                    <label style="font-size:13px">
+                                        <input type="checkbox" name="price" value="10 - 15 triệu" />
+                                        <span class="yes" id="dropdown-All">10 - 15 triệu</span>
+                                        <span class="no" id="dropdown-All">10 - 15 triệu</span>
+                                    </label>
+                                    <label style="font-size:13px">
+                                        <input type="checkbox" name="price" value="15 - 20 triệu" />
+                                        <span class="yes" id="dropdown-All">15 - 20 triệu</span>
+                                        <span class="no" id="dropdown-All">15 - 20 triệu</span>
+                                    </label>
+                                    <label style="font-size:13px">
+                                        <input type="checkbox" name="price" value="Trên 20 triệu" />
+                                        <span class="yes" id="dropdown-All">Trên 20 triệu</span>
+                                        <span class="no" id="dropdown-All">Trên 20 triệu</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" style=" display: flex; cursor: pointer" class="button-result">Xem kết quả</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button onclick="myFunctionDropdown()" class="dropbtn">Giá <i class="fas fa-caret-down"></i></button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <form asp-controller="Home" asp-action="AllProduct" method="get">
+                            <button name="price" value="Dưới 5 triệu" class="dropdown-price">Dưới 5 triệu</button>
+                            <button name="price" value="5 - 10 triệu" class="dropdown-price">5 - 10 triệu</button>
+                            <button name="price" value="10 - 15 triệu" class="dropdown-price">10 - 15 triệu</button>
+                            <button name="price" value="15 - 20 triệu" class="dropdown-price">15 - 20 triệu</button>
+                            <button name="price" value="Trên 20 triệu" class="dropdown-price">Trên 20 triệu</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="dropdownBrand">
+                    <button onclick="myFunctionDropdownBrand()" class="dropbtnBrand">Hãng điện thoại <i class="fas fa-caret-down"></i></button>
+                    <div id="myDropdownBrand" class="dropdown-content-Brand">
+                        <form asp-controller="Home" asp-action="AllProduct" method="get">
+                            <button name="brand" value="Apple" class="dropdown-Brand"><img src="https://cellphones.com.vn/media/icons/brands/brand-286.svg" alt="" /></button>
+                            <button name="brand" value="SamSung" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png" alt="" /></button>
+                            <button name="brand" value="Xiaomi" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png" alt="" /></button>
+                            <button name="brand" value="Oppo" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg" alt=""></button>
+                            <button name="brand" value="Nokia" class="dropdown-Brand"><img src="https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg" alt=""></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sort-product-all">
+            <div class="sort-product-title">Sắp xếp theo</div>
+            <div class="sort-product-content">
+                <button class="sort-product-trending" style=" border: 1px solid #d70018;background: #FEF2F2">
+                    <a asp-controller="Home" asp-action="AllProduct" style="color: #d70018;">Nổi bật <i class="fas fa-thumbs-up"></i></a>
+                </button>
+                @if (@ViewData["PriceAscending"] != "")
+                {
+                    <button class="sort-product-ascending">
+                        <a asp-controller="Home" asp-action="AllProduct" asp-route-sortOrderAscending="@ViewData["PriceAscending"]">Giá tăng dần <i class="fas fa-sort-amount-up"></i></a>
+                    </button>
+                }
+                else if (@ViewData["PriceAscending"] == "")
+                {
+                    <button class="sort-product-ascending" style=" border: 1px solid #d70018; background: #FEF2F2">
+                        <a asp-controller="Home" asp-action="AllProduct" asp-route-sortOrderAscending="@ViewData["PriceAscending"]" style="color: #d70018;">Giá tăng dần <i class="fas fa-sort-amount-up"></i></a>
+                    </button>
+                }
+                @if (@ViewData["PriceDescending"] != "")
+                {
+                    <button class="sort-product-descending">
+                        <a asp-controller="Home" asp-action="AllProduct" asp-route-sortOrderDescending="@ViewData["PriceDescending"]">Giá giảm dần <i class="fas fa-sort-amount-down"></i></a>
+                    </button>
+                }
+                else if (@ViewData["PriceDescending"] == "")
+                {
+                    <button class="sort-product-descending" style=" border: 1px solid #d70018; background: #FEF2F2">
+                        <a asp-controller="Home" asp-action="AllProduct" asp-route-sortOrderDescending="@ViewData["PriceDescending"]" style="color: #d70018;">Giá giảm dần <i class="fas fa-sort-amount-down"></i></a>
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="list-product">
+            <div class="row">
+                @foreach (var items in Model.Item2.GroupBy(c => c.ProductId).Select(s => new
+                {
+                    ProductIdTrending = s.Key,
+                    QuantityRating = s.Average(o => o.Rating),
+                }).Where(o => o.QuantityRating >= 4).OrderByDescending(o => o.QuantityRating).ToList())
+                {
+                    @foreach (var item in Model.Item1)
+                    {
+                        @if (items.ProductIdTrending == item.Id)
+                        {
+                            int ratingCount = 0;
+                            int? ratingAverage = 0;
+                            int? ratingSum = 0;
+                            @if (item.Status == true)
+                            {
+                                <div class="col-md-3">
+                                    <div class="items-product">
+                                        @if (item.ImageProductId == null)
+                                        {
+                                            <div class="image-product">
+                                                <a href="">
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" alt="" />
+                                                    <h3>No data</h3>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="image-product">
+                                                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                                    <img src="~/assetsAdmin/imgProducts/@item.ImageProductss.ImageName" style="width: 220px; height: 220px " alt="">
+                                                </a>
+                                            </div>
+
+                                        }
+                                        <div class="content-product">
+                                            <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                                <div class="name-product" style="font-size: 16px">@item.Name</div>
+                                            </a>
+                                            <div class="price-product">
+                                                <p class="special-price">@item.Price.ToString("#,##0") ₫</p>
+                                                <p class="old-price">34.900.000 ₫</p>
+                                            </div>
+                                            @foreach (var item2 in Model.Item2)
+                                            {
+                                                @if (item.Id == item2.ProductId)
+                                                {<span style="display:none">@(ratingSum += item2.Rating)</span>
+                                                    <span style="display:none">@((ratingCount += 1))</span>
+                                                    <span style="display:none">@((ratingAverage = ratingSum / ratingCount))</span>
+                                                }
+                                            }
+                                            <div class="evaluate" style="font-size:13px">
+                                                <div class="evaluate-star">
+                                                    @if (ratingAverage == 0)
+                                                    {
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 1)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 2)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 3)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 4)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star unchecked"></i>
+                                                    }
+                                                    @if (ratingAverage == 5)
+                                                    {
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                        <i class="fas fa-star checked"></i>
+                                                    }
+                                                </div>
+                                                <div class="evaluate-quantity">
+                                                    <span>@ratingCount đánh giá</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+            @if (Model.Item1.Count() > 4)
+            {
+                <a href="#" id="loadMore">Xem thêm sản phẩm <i class="fas fa-caret-down"></i></a>
+            }
+        </div>
+    </div>
+</div>
+<div class="brand-page">
+    <div class="title-brand-page">
+        <p class="main-title">CHUYÊN TRANG THƯƠNG HIỆU</p>
+    </div>
+    <div class="content-brand-page">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-apple-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-samsung-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-asus-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="items-brand-page">
+                    <a href="">
+                        <img src="https://cellphones.com.vn/media/icons/banner/banner-sis-xiaomi-homepage.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load More -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".items-product").slice(0, 4).show();
+        $("#loadMore").on("click", function (e) {
+            e.preventDefault();
+            $(".items-product:hidden").slice(0, 4).slideDown();
+            if ($(".items-product:hidden").length == 0) {
+                $("#loadMore").text("Đã hiển thị tất cả").addClass("noContent");
+            }
+        });
+
+    })
+</script>
+<!--End Load More -->
+
+<script>
+@*Dropdown*@
+    function myFunctionDropdown() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+@*End-Dropdown*@
+
+@* Dropdown - Brand *@
+function myFunctionDropdownBrand() {
+    document.getElementById("myDropdownBrand").classList.toggle("showBrand");
+}
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtnBrand')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content-Brand");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('showBrand')) {
+                openDropdown.classList.remove('showBrand');
+            }
+        }
+    }
+}
+@* End - Dropdown - Brand *@
+</script>
+<!-- Bộ lọc -->
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = 245 + "px";
+            }
+        });
+    }
+</script>
+<!-- End Bộ lọc -->

@@ -1,0 +1,132 @@
+.section-order {
+    margin-top: 150px;
+}
+.search {
+    background: #eeeeee;
+    text-align: center;
+    padding: 34px;
+}
+
+.search h2 {
+    font-size: 25px;
+}
+
+.search .form-search-order {
+    text-align: center;
+    color: #000;
+}
+
+.search .form-search-order ul {
+    display: inline-flex;
+}
+
+.search .form-search-order ul li {
+    display: inline-grid;
+    padding: 16px;
+}
+
+.search .form-search-order ul li label{
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.search .form-search-order ul li input {
+    margin-top: 11px;
+    padding: 15px;
+}
+
+.btn-check {
+    padding: 10px 40px 10px 40px;
+    background-color: #e11b1e;
+    color: #fff;
+    border: 1px solid #e11b1e;
+    border-radius: 5px;
+}
+
+.btn-check a {
+    color: #fff;
+    font-weight: 600;
+}
+
+.info-order {
+    text-align: -webkit-center;
+}
+
+.info-order table {
+    width: 94%;
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 7px;
+    padding: 8px 0 8px 0;
+}
+
+.info-order table thead tr{
+    font-size: 14px;
+}
+
+.info-order table thead tr th{
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 5px;
+    background: #e11b1e;
+    color: #fff;
+}
+
+/* .info-order table tbody {
+
+}
+
+.info-order table tbody tr {
+
+} */
+
+.info-order table tbody tr td{
+    text-align: center;
+    padding: 16px 37px 21px;
+    font-size: 14px;
+    font-weight: 500;
+    border-top: 0.5px solid rgb(217, 217, 217);
+    border-image: initial;
+    border-right: none !important;
+    border-left: none !important;
+    border-bottom: none !important;
+}
+
+.border-info {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 23px;
+    width: 50%;
+}
+
+.border-info p {
+    float: left;
+}
+
+.border-badge {
+    border: 1px solid;
+    width: 20%;
+    border-radius: 16px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.badge {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.badge span {
+    font-size: 13px;
+    font-weight: 500;
+    background-color: #5bdb5b;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+/*Error*/
+.contact-form-error {
+    color: red;
+    display: none;
+}
+
+

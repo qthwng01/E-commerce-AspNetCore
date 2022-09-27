@@ -1,0 +1,189 @@
+﻿@model Tuple<IEnumerable<DA_TOTNGHIEP.Models.Invoices>, IEnumerable<DA_TOTNGHIEP.Models.InvoiceDetails>>
+
+@{
+    ViewData["Title"] = "ViewAll";
+}
+
+<h3>Danh sách hoá đơn</h3>
+<div class="card mt-2">
+    <div class="card-content">
+        <div class="card-body">
+            <a onclick="showInPopup('@Url.Action("Create","Invoices",null,Context.Request.Scheme)','Tạo hoá đơn')" class="btn btn-primary"><i class='bx bx-plus-circle ml-1'></i><h5 style="display:inline;color:white"> Tạo hoá đơn</h5></a>
+            <form asp-controller="Invoices" asp-action="Index" method="get" style="display:inline;margin-left:12rem;">
+                <div style="margin-top:1rem">
+                    <fieldset class="form-group d-inline-flex pr-2">
+                        <div style="margin-right: 1rem;">
+                            <span style=" font-weight: 700;">Trạng thái:</span>
+                            <select class="form-select mr-1" id="basicSelect" name="Status">
+                                <option value="">Tất cả</option>
+                                <option value="Đang giao hàng">Đang giao hàng</option>
+                                <option value="Đã giao">Đã giao</option>
+                                <option value="Huỷ đơn">Huỷ đơn</option>
+                                <option value="Giao dịch không hoàn thành">Giao dịch không hoàn thành</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span style=" font-weight: 700;">Thông tin:</span>
+                            <div>
+                                <input type="text" name="SearchString" placeholder="Nhập Code, SĐT, ĐC..." class="input-css" style="border: 1px solid #dce7f1;border-radius: .25rem;padding: 6px;" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div style="margin-bottom:1rem">
+                    <span style=" font-weight: 700;">Từ ngày:</span> <input type="date" id="birthdaytime" name="fromDate" style="
+                                                                    border: 1px solid;
+                                                                    border-radius: 7px;
+                                                                    padding: 8px;
+                                                                ">
+                    <span style=" font-weight: 700;">đến ngày:</span> <input type="date" id="birthdaytime" name="toDate" style="
+                                    border: 1px solid;
+                                    border-radius: 7px;
+                                    padding: 8px;
+                                ">
+                </div>
+                <button type="submit" class="btn btn-danger">Tìm kiếm <i class="fas fa-search"></i></button>
+            </form>
+                <div class="scrollmenu" style="overflow: scroll; white-space: nowrap; height: 500px;">
+                    <div class="table-responsive" style="overflow-x:unset !important; margin-bottom:2rem">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Code
+                                    </th>
+                                    @*<th>
+                                       ID Người Dùng
+                                    </th>*@
+                                    <th>
+                                        Ngày Tạo
+                                    </th>
+                                    <th>
+                                        Địa Chỉ
+                                    </th>
+                                    <th>
+                                        SĐT
+                                    </th>
+                                    <th>
+                                        Tổng Tiền
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Họ và Tên
+                                    </th>
+                                    <th>
+                                        Trạng Thái
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Item1.Count() != 0)
+                                {
+                                    @foreach (var item in Model.Item1)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Code)
+                                            </td>
+                                            @*<td>
+                                                @Html.DisplayFor(modelItem => item.UserId)
+                                            </td>*@
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IssuedDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ShippingAddress)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ShippingPhone)
+                                            </td>
+                                            <td>
+                                                @item.Total.ToString("#,##VNĐ")
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Fullname)
+                                            </td>
+                                            <td>
+                                                @if (item.StatusId == 1)
+                                                {
+                                                    <span class="badge bg-primary text-white">Đang giao hàng</span>}
+                                                @if (item.StatusId == 2)
+                                                {
+                                                    <span class="badge bg-danger text-white">Hủy đơn</span>}
+                                                @if (item.StatusId == 3)
+                                                {
+                                                    <span class="badge bg-danger text-white">Giao dịch không hoàn thành</span>}
+                                                @if (item.StatusId == 4)
+                                                {
+                                                    <span class="badge bg-success text-white">Đã giao</span>}
+                                            </td>
+
+                                            <td>
+                                                @foreach (var item2 in Model.Item2)
+                                                {
+                                                    @if (item.Id == item2.InvoiceId)
+                                                    {
+                                                        <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Details", "InvoiceDetails", new { id = item2.Id })','Details')"><i title="Chi tiết hoá đơn" class="fas fa-file-invoice" style="font-size: 23px; color: #34e1cf"></i></button>
+                                                    }
+                                                }
+                                            </td>
+
+                                            <td style="text-align:unset !important">
+                                                <div>
+
+                                                    @if (item.StatusId == 2)
+                                                    {
+                                                        <button style="display:none;" onclick="showInPopup('@Url.Action("Edit", "Invoices", new { id = item.Id })','Edit')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                                        <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                                            <button type="submit" title="Xóa" style="border: none; background: none; padding: 0 !important"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                                        </form>
+                                                    }
+                                                    @if (item.StatusId == 4)
+                                                    {
+                                                        <button style="display:none;" onclick="showInPopup('@Url.Action("Edit", "Invoices", new { id = item.Id })','Edit')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                                        <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                                            <button type="submit" title="Xóa" style="border: none; background: none; padding: 0 !important"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                                        </form>
+                                                    }
+                                                    else if (item.StatusId != 2)
+                                                    {
+                                                        <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("SendWelcomeMail", "Invoices", new { id = item.Id })','SendWelcomeMail')"><i title="Gửi Mail" class="fas fa-mail-bulk" style="font-size: 23px; color: #bea91c;"></i></button>
+                                                        <button style="border: none; background: none;" onclick="showInPopup('@Url.Action("Edit", "Invoices", new { id = item.Id })','Edit')"><i title="Sửa" class="fas fa-edit" style="font-size: 23px; color: #415ebf "></i></button>
+                                                        <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                                            <button type="submit" title="Xóa" style="border: none; background: none;"><i class="fas fa-trash-alt" style="font-size:23px;color:crimson"></i></button>
+                                                        </form>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="3" style="color:crimson">Không có dữ liệu ! <i class="far fa-frown"></i>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

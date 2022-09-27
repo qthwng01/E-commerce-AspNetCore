@@ -1,0 +1,416 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+* {box-sizing:border-box; padding: 0; margin: 0;}input,button,textarea{border:0;outline:none;}
+
+html {
+    font-size: 62.5%;
+    line-height: 1.6rem;
+    box-sizing: border-box;
+}
+
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    display: inline-block;
+    max-width: 100%;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+/* Menu Header Top */
+.menu-header {
+    background-color: #D70018;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+.menu-nav-top {
+    margin: auto;
+    width: 80%;
+}
+.menu-container-nav {
+    height: 105px;
+}
+.menu-container {
+    display: inline-flex;   
+    padding: 22px;
+}
+.logo-shop {
+    padding-right: 15px;
+}
+.logo-shop img{
+    height: 60px;
+    width: 300px;
+}
+.form-search {
+margin: auto;
+padding: 7px;
+border:1px solid #fff;
+border-radius: 10px;
+height: 40px;
+background-color: #fff;
+
+}
+.box-about {
+    padding-left: 30px;
+    display: inline-flex;
+}
+.box-search input {
+    width: 200px;
+    height: 25px;
+}
+.box-search i {
+    font-size: 18px;
+    float:right;
+    position: fixed;
+    margin: 4px 0px 0px -17px;
+}
+.phone {
+    color: #fff;
+    display: inline-flex;
+    margin-right: 30px;
+}
+.phone:hover {
+    border-radius: 10px;
+    background-color: #e78d97;
+}
+.phone .icon-phone {
+    padding-right: 5px;
+    margin: auto;
+    font-size: 25px;
+}
+.phone .content-phone {
+    margin: auto;
+}
+.phone .content-phone p {font-size: 15px;}
+.phone .content-phone strong {font-size:18px;}
+.shipping {
+    color: #fff;
+    display: inline-flex;
+    margin-right: 30px;
+}
+.shipping:hover {
+    border-radius: 10px;
+    background-color: #e78d97;
+}
+.shipping .icon-shipping {
+    padding-right: 5px;
+    margin: auto;
+    font-size: 25px;
+}
+.shipping .content-shipping {
+    margin: auto;
+}
+.shipping .content-shipping p {font-size: 15px;}
+
+.cart {
+    color: #fff;
+    display: inline-flex;
+    margin-right: 30px;
+}
+.cart:hover {
+    border-radius: 10px;
+    background-color: #e78d97;
+}
+.cart .icon-cart {
+    padding-right: 5px;
+    margin: auto;
+    font-size: 25px;
+}
+.cart .content-cart {
+    margin: auto;
+}
+.cart .content-cart p {font-size: 15px;}
+.user {
+    color: #fff;
+    display: inline-flex;
+    margin-right: 30px;
+}
+.user:hover {
+    border-radius: 10px;
+    background-color: #e78d97;
+}
+.user .icon-user {
+    padding-right: 5px;
+    margin: auto;
+    font-size: 25px;
+}
+.user .content-user {
+    margin: auto;
+}
+.user .content-user p {font-size: 15px;}
+/*End Menu Header Top*/
+
+/* Menu Header Main */
+.menu-header-main {
+    background-color: #252525;
+    height: 38px;
+}
+.menu-nav-main {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+}
+.menu-main-container {
+    font-size: 15px;
+    display: inline-flex;
+}
+.menu-main-container a {
+    color: #fff;
+}
+.menu-phone {
+    margin-right: 50px;
+    padding-bottom: 12px;
+}
+.menu-phone:hover .content-nav-phone{
+    display: block;
+}
+.menu-phone .content-nav-phone {
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    display: none;
+    text-align: start;
+    height: 160px;
+    background-color: #f8f9fa;
+    width: 130px;
+    line-height: 25px;
+    padding: 5px;
+    box-shadow: 0px 8px 16px 4px rgb(0 0 0 / 20%);
+    position: absolute;
+    margin-top: 9px;
+}
+.menu-phone .content-nav-phone:after{
+    content:''; 
+    position: absolute; 
+    top: 0;
+    left: 35%;
+    margin-left: -12px;
+		margin-top:-12px; 
+    width: 0;
+    z-index:1;
+    height: 0;
+    border-bottom: solid 15px #FFF;
+    border-left: solid 12px transparent;
+    border-right: solid 12px transparent;
+}
+.menu-phone .content-nav-phone a {
+    display: block;
+    color: #000;
+}
+.menu-phone .content-nav-phone .content-apple {
+    display: none;
+}
+.menu-phone .content-nav-phone a:hover {
+    font-weight: bold;
+}
+.menu-phone .content-nav-phone .apple:hover .content-apple {
+    background-color: #f8f9fa;
+    display:block;
+}
+.menu-accessory {
+    margin-right: 50px;
+    padding-bottom: 12px;
+}
+.menu-accessory:hover .content-nav-accessory{
+    display: block;
+}
+.menu-accessory .content-nav-accessory {
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    display: none;
+    text-align: start;
+    height: 238px;
+    background-color: #f8f9fa;
+    width: auto;
+    line-height: 25px;
+    padding: 5px;
+    box-shadow: 0px 8px 16px 4px rgb(0 0 0 / 20%);
+    position: absolute;
+    margin-top:9px;
+}
+.menu-accessory .content-nav-accessory:after{
+    content:''; 
+    position: absolute; 
+    top: 0;
+    left: 35%;
+    margin-left: -12px;
+		margin-top:-12px; 
+    width: 0;
+    z-index:1;
+    height: 0;
+    border-bottom: solid 15px #FFF;
+    border-left: solid 12px transparent;
+    border-right: solid 12px transparent;
+}
+.menu-accessory .content-nav-accessory a {
+    display: block;
+    color: #000;
+}
+.menu-accessory .content-nav-accessory a:hover {
+    font-weight: bold;
+}
+.menu-secondhand {
+    margin-right: 50px;
+    padding-bottom: 12px;
+}
+.menu-secondhand:hover .content-nav-secondhand{
+    display: block;
+}
+.menu-secondhand .content-nav-secondhand {
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    display: none;
+    text-align: start;
+    height: 113px;
+    background-color: #f8f9fa;
+    width: auto;
+    line-height: 25px;
+    padding: 5px;
+    box-shadow: 0px 8px 16px 4px rgb(0 0 0 / 20%);
+    position: absolute;
+    margin-top: 9px;
+}
+.menu-secondhand .content-nav-secondhand:after{
+    content:''; 
+    position: absolute; 
+    top: 0;
+    left: 35%;
+    margin-left: -12px;
+		margin-top:-12px; 
+    width: 0;
+    z-index:1;
+    height: 0;
+    border-bottom: solid 15px #FFF;
+    border-left: solid 12px transparent;
+    border-right: solid 12px transparent;
+}
+.menu-secondhand .content-nav-secondhand a {
+    display: block;
+    color: #000;
+}
+.menu-secondhand .content-nav-secondhand a:hover {
+    font-weight: bold;
+}
+.menu-sale {
+    margin-right: 50px;
+    padding-bottom: 12px;
+}
+.menu-sale:hover .content-nav-sale{
+    display: block;
+}
+.menu-sale .content-nav-sale {
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    display: none;
+    text-align: start;
+    height: 113px;
+    background-color: #f8f9fa;
+    width: auto;
+    line-height: 25px;
+    padding: 5px;
+    box-shadow: 0px 8px 16px 4px rgb(0 0 0 / 20%);
+    position: absolute;
+    margin-top:9px;
+}
+.menu-sale .content-nav-sale:after{
+    content:''; 
+    position: absolute; 
+    top: 0;
+    left: 35%;
+    margin-left: -12px;
+		margin-top:-12px; 
+    width: 0;
+    z-index:1;
+    height: 0;
+    border-bottom: solid 15px #FFF;
+    border-left: solid 12px transparent;
+    border-right: solid 12px transparent;
+}
+.menu-sale .content-nav-sale a {
+    display: block;
+    color: #000;
+}
+.menu-sale .content-nav-sale a:hover {
+    font-weight: bold;
+}
+.menu-installment {
+    margin-right: 50px;
+}
+
+
+
+
+.warpper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0px 2px;
+    background: #f4f4f478;
+    display: inline-block;
+    color: #fff;
+    border-radius: 3px 3px 0px 0px;
+    margin-top: 1rem;
+}
+
+.panels {
+    min-height: 200px;
+    width: 100%;
+    max-width: 565px;
+    border-radius: 3px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.panel {
+    display: none;
+    animation: fadein 0.8s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.panel-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.radio {
+    display: none;
+}
+
+#one:checked ~ .panels #one-panel,
+#two:checked ~ .panels #two-panel,
+#three:checked ~ .panels #three-panel {
+    display: block;
+}
+
+#one:checked ~ .tabs #one-tab,
+#two:checked ~ .tabs #two-tab,
+#three:checked ~ .tabs #three-tab {
+    background: #71c2f4;
+    color: #000;
+    border-top: 3px solid #32557f;
+}

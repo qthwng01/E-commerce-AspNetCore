@@ -1,0 +1,30 @@
+﻿@using DA_TOTNGHIEP.Models
+@model List<DA_TOTNGHIEP.Models.UserRolesViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h1>Quản lí cấp quyền</h1>
+<div class="card" style="padding:1rem;">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Quyền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                
+                <td>@user.Email</td>
+                <td>@string.Join(" , ", user.Roles.ToList())</td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="UserRoles" asp-action="Manage" asp-route-userId="@user.UserId">Quản lí quyền</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
