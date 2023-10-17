@@ -1,7 +1,7 @@
 # Ecommerce-Shop App
 Graduation Thesis
 
-TÊN ĐỀ TÀI: WEBSITE BÁN HÀNG VỚI ASP.NET CORE 
+TÊN ĐỀ TÀI: WEBSITE BÁN HÀNG VỚI ASP.NET CORE TÍCH HỢP THANH TOÁN MOMO
 
 1.ĐIỀU KIỆN TIÊN QUYẾT
 
